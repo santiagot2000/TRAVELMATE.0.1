@@ -36,6 +36,17 @@ body{
     font-weight:bold;
 }
 
+.flecha {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    margin-left: 8px;
+    margin-bottom: 3px;
+}
+
 nav {
   /* background: linear-gradient(to right, #9c7f4f 0%, #b3925c 50%, #8a7248 100%); */
   padding: 18px 30px;
