@@ -1,127 +1,319 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descrubre tu Proximo Viaje</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Descubre tu Próximo Viaje - TravelMate</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    
+
 <!-- ===== ENCABEZADO ===== -->
 <header class="encabezado">
-
     <div class="contenedor-navegacion">
-
-        <h1 class="logo">TravelMate</h1>
-
+        <h1 class="logo"><a href="../index.html" style="color: inherit; text-decoration: none;">TravelMate</a></h1>
         <nav>
             <div class="nav-item">
-                <span class="nav-link">Inicio</span>
+                <a href="../index.html" class="nav-link" style="text-decoration: none;">Inicio</a>
             </div>
-
             <div class="nav-item">
-                <span class="nav-link">
-                    Descubrir
-                    <span class="flecha"></span>
-                </span>
-
+                <span class="nav-link">Descubrir <span class="flecha"></span></span>
                 <div class="dropdown">
-                    <!-- <a href="#">Cuestionario</a> -->
-                    <a href="#">Preferencias</a>
-                    <a href="#">Presupuestos</a>
+                    <!-- <a href="cuestionario.html">Cuestionario</a> -->
+                    <a href="preferencias.html">Preferencias</a>
+                    <a href="presupuestos.html">Presupuestos</a>
                 </div>
             </div>
-
             <div class="nav-item">
-                <span class="nav-link">
-                    Destinos
-                    <span class="flecha"></span>
-                </span>
+                <span class="nav-link">Destinos <span class="flecha"></span></span>
                 <div class="dropdown">
-                    <a href="#">Catálogo</a>
-                    <a href="#">Filtros</a>
-                    <a href="#">Detalle</a>
+                    <a href="catalogos.html">Catálogo</a>
+                    <a href="filtros.html">Filtros</a>
+                    <a href="detalle.html">Detalle</a>
                 </div>
             </div>
-
             <div class="nav-item">
-                <span class="nav-link">
-                    Recomendaciones
-                    <span class="flecha"></span>
-                </span>
+                <span class="nav-link">Recomendaciones <span class="flecha"></span></span>
                 <div class="dropdown">
-                    <a href="#">Compatibilidad</a>
-                    <a href="#">Sorpréndeme</a>
+                    <a href="compatibilidad.html">Compatibilidad</a>
+                    <a href="sorprendeme.html">Sorpréndeme</a>
                 </div>
             </div>
-
             <div class="nav-item">
-                <span class="nav-link">
-                    Planificador
-                    <span class="flecha"></span>
-                </span>
+                <span class="nav-link">Planificador <span class="flecha"></span></span>
                 <div class="dropdown">
-                <a href="#">Itinerario</a>
-                <a href="#">Actividades</a>
-                <a href="#">Presupuesto</a>
+                    <a href="itinerario.html">Itinerario</a>
+                    <a href="actividades.html">Actividades</a>
+                    <a href="presupuesto.html">Presupuesto</a>
                 </div>
             </div>
-
             <div class="nav-item">
-                <span class="nav-link">
-                    Perfil
-                    <span class="flecha"></span>
-                </span>
+                <span class="nav-link">Perfil <span class="flecha"></span></span>
                 <div class="dropdown">
-                <a href="#">Mi cuenta</a>
-                <a href="#">Mis viajes</a>
-                <a href="#">Favoritos</a>
-                <a href="#">Configuración</a>
+                    <a href="cuenta.html">Mi cuenta</a>
+                    <a href="viajes.html">Mis viajes</a>
+                    <a href="favoritos.html">Favoritos</a>
                 </div>
             </div>
-
             <button class="boton-principal">
-                <a href="#"></a>Ingresar
+                <a href="login.html">Ingresar</a>
             </button>
-           
         </nav>
-
     </div>
-
 </header>
 
-<!-- ===== SECCION PRINCIPAL ===== -->
- <p>Acaba el Cuestionario</p>
+<!-- ===== SECCIÓN PRINCIPAL DEL CUESTIONARIO ===== -->
+<main class="cuestionario-seccion">
+    <div class="seccion-contenedor">
 
+        <div class="cuestionario-wrapper">
 
+            <!-- Encabezado del Cuestionario -->
+            <div class="cuestionario-header">
+                <span class="seccion-etiqueta">Motor de Afinidades</span>
+                <h2 class="cuestionario-titulo">¿Qué quieres vivir en tu próximo viaje?</h2>
+                <p class="cuestionario-subtitulo">
+                    Responde 4 preguntas rápidas y nuestro algoritmo calculará los destinos con mayor porcentaje de compatibilidad para ti.
+                </p>
 
-<!-- ===== PIE DE PAGINA ===== -->
+                <!-- Barra de Progreso -->
+                <div class="progreso-barra-fondo">
+                    <div class="progreso-barra-llenado" id="barraProgreso" style="width: 25%;"></div>
+                </div>
+                <div class="progreso-indicador" id="textoProgreso">Paso 1 de 4: Origen y Duración</div>
+            </div>
+
+            <!-- Formulario Wizard -->
+            <form id="formCuestionario" class="cuestionario-form">
+
+                <!-- ===== PASO 1: Origen y Duración ===== -->
+                <div class="paso-wizard activo" data-paso="1">
+                    <h3 class="paso-pregunta">📍 1. ¿Desde dónde sales y cuánto tiempo tienes?</h3>
+
+                    <div class="campo-grupo">
+                        <label for="cuestOrigen" class="campo-label">Ciudad de origen</label>
+                        <select id="cuestOrigen" class="campo-input" required>
+                            <option value="Medellín">Medellín, Colombia</option>
+                            <option value="Bogotá">Bogotá, Colombia</option>
+                            <option value="Cali">Cali, Colombia</option>
+                            <option value="Barranquilla">Barranquilla, Colombia</option>
+                            <option value="Bucaramanga">Bucaramanga, Colombia</option>
+                            <option value="Otra">Otra ciudad</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-grupo">
+                        <label class="campo-label">Duración aproximada del viaje</label>
+                        <div class="opciones-grid">
+                            <label class="opcion-tarjeta seleccionada">
+                                <input type="radio" name="duracion" value="escapada" checked>
+                                <span class="opcion-icono">⚡</span>
+                                <span class="opcion-titulo">Escapada corta</span>
+                                <span class="opcion-sub">3 a 4 días</span>
+                            </label>
+                            <label class="opcion-tarjeta">
+                                <input type="radio" name="duracion" value="semana">
+                                <span class="opcion-icono">🗓️</span>
+                                <span class="opcion-titulo">Semana completa</span>
+                                <span class="opcion-sub">5 a 8 días</span>
+                            </label>
+                            <label class="opcion-tarjeta">
+                                <input type="radio" name="duracion" value="largo">
+                                <span class="opcion-icono">🌍</span>
+                                <span class="opcion-titulo">Gran travesía</span>
+                                <span class="opcion-sub">9 a 15+ días</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== PASO 2: Compañía ===== -->
+                <div class="paso-wizard" data-paso="2">
+                    <h3 class="paso-pregunta">👥 2. ¿Con quién vas a viajar?</h3>
+                    <p class="paso-ayuda">El tipo de compañía nos ayuda a sugerir destinos adecuados en ritmo y actividades.</p>
+
+                    <div class="opciones-grid">
+                        <label class="opcion-tarjeta seleccionada">
+                            <input type="radio" name="compania" value="solo" checked>
+                            <span class="opcion-icono">🎒</span>
+                            <span class="opcion-titulo">Solo / Mochilero</span>
+                            <span class="opcion-sub">Libertad total a tu propio ritmo</span>
+                        </label>
+                        <label class="opcion-tarjeta">
+                            <input type="radio" name="compania" value="pareja">
+                            <span class="opcion-icono">💑</span>
+                            <span class="opcion-titulo">En Pareja</span>
+                            <span class="opcion-sub">Romance, buena comida y momentos únicos</span>
+                        </label>
+                        <label class="opcion-tarjeta">
+                            <input type="radio" name="compania" value="amigos">
+                            <span class="opcion-icono">🥳</span>
+                            <span class="opcion-titulo">Con Amigos</span>
+                            <span class="opcion-sub">Aventura, fiesta, fotos y diversión grupal</span>
+                        </label>
+                        <label class="opcion-tarjeta">
+                            <input type="radio" name="compania" value="familia">
+                            <span class="opcion-icono">👨‍👩‍👧‍👦</span>
+                            <span class="opcion-titulo">En Familia</span>
+                            <span class="opcion-sub">Planes seguros para niños y adultos</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ===== PASO 3: Presupuesto en COP ===== -->
+                <div class="paso-wizard" data-paso="3">
+                    <h3 class="paso-pregunta">💰 3. ¿Cuál es tu presupuesto estimado por persona?</h3>
+                    <p class="paso-ayuda">Cálculos proyectados en pesos colombianos para vuelos, hospedaje y gastos básicos.</p>
+
+                    <div class="opciones-grid">
+                        <label class="opcion-tarjeta seleccionada">
+                            <input type="radio" name="presupuesto" value="economico" checked>
+                            <span class="opcion-icono">🪙</span>
+                            <span class="opcion-titulo">Económico / Mochilero</span>
+                            <span class="opcion-sub">Hasta $2.500.000 COP</span>
+                        </label>
+                        <label class="opcion-tarjeta">
+                            <input type="radio" name="presupuesto" value="moderado">
+                            <span class="opcion-icono">💳</span>
+                            <span class="opcion-titulo">Equilibrado / Confort</span>
+                            <span class="opcion-sub">$2.500.000 a $5.000.000 COP</span>
+                        </label>
+                        <label class="opcion-tarjeta">
+                            <input type="radio" name="presupuesto" value="premium">
+                            <span class="opcion-icono">💎</span>
+                            <span class="opcion-titulo">Premium / Internacional</span>
+                            <span class="opcion-sub">Más de $5.000.000 COP</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ===== PASO 4: Experiencias (Intereses) ===== -->
+                <div class="paso-wizard" data-paso="4">
+                    <h3 class="paso-pregunta">✨ 4. ¿Qué experiencias buscas vivir?</h3>
+                    <p class="paso-ayuda">Selecciona todas las que te apasionen (puedes elegir varias):</p>
+
+                    <div class="chips-intereses-grid">
+                        <label class="chip-interes activo">
+                            <input type="checkbox" name="intereses" value="playa" checked>
+                            <span>🏖️ Playa y Mar</span>
+                        </label>
+                        <label class="chip-interes activo">
+                            <input type="checkbox" name="intereses" value="gastronomia" checked>
+                            <span>🍽️ Gastronomía Local</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="cultura">
+                            <span>🏛️ Historia y Museos</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="aventura">
+                            <span>🏔️ Aventura y Montaña</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="romance">
+                            <span>🍷 Romance y Atardeceres</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="fiesta">
+                            <span>🎉 Vida Nocturna y Fiesta</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="naturaleza">
+                            <span>🌿 Naturaleza y Fauna</span>
+                        </label>
+                        <label class="chip-interes">
+                            <input type="checkbox" name="intereses" value="fotografia">
+                            <span>📸 Lugares Fotogénicos</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botones de Navegación del Wizard -->
+                <div class="cuestionario-botones">
+                    <button type="button" class="boton-wizard boton-prev" id="btnPasoAnterior" style="display: none;">
+                        ← Anterior
+                    </button>
+                    <button type="button" class="boton-wizard boton-next" id="btnPasoSiguiente">
+                        Siguiente →
+                    </button>
+                    <button type="submit" class="boton-wizard boton-finalizar" id="btnFinalizar" style="display: none;">
+                        🎯 Calcular mi viaje ideal
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- ===== PANTALLA DE CARGA / MATCHING ===== -->
+            <div class="cuestionario-cargando" id="pantallaCargando" style="display: none;">
+                <div class="spinner-matching"></div>
+                <h3 class="cargando-titulo" id="cargandoTexto">Analizando tu perfil viajero...</h3>
+                <p class="cargando-sub">Comparando afinidades de clima, presupuesto y actividades en nuestra base de datos.</p>
+            </div>
+
+            <!-- ===== SECCIÓN DE RESULTADOS ===== -->
+            <div class="cuestionario-resultados" id="seccionResultados" style="display: none;">
+                <div class="resultados-encabezado">
+                    <span class="seccion-etiqueta">¡Match Encontrado!</span>
+                    <h3 class="resultados-titulo">Tus destinos más compatibles</h3>
+                    <p class="resultados-sub">
+                        Calculamos la compatibilidad según tus preferencias. Aquí están tus 3 mejores opciones:
+                    </p>
+                </div>
+
+                <div class="resultados-grid" id="gridResultados">
+                    <!-- Se llena automáticamente con JavaScript -->
+                </div>
+
+                <div class="seccion-cta" style="margin-top: 36px;">
+                    <button type="button" class="boton-secundario" id="btnReiniciarCuestionario">
+                        🔄 Volver a calcular con otras respuestas
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<!-- ===== PIE DE PÁGINA ===== -->
 <footer>
-  <div class="footer-brand">
-    <div class="footer-logo">TravelMate</div>
-    <p class="footer-desc">
-      Hacemos que planear un viaje sea claro y sencillo, para jóvenes y para adultos mayores.
-    </p>
-    <p class="footer-tag">Prototipo académico · Datos de demostración</p>
-  </div>
+    <div class="footer-brand">
+        <div class="footer-logo">TravelMate</div>
+        <p class="footer-desc">
+            Hacemos que planear un viaje sea claro y sencillo, para jóvenes y para adultos mayores.
+        </p>
+        <p class="footer-tag">Prototipo académico · Datos de demostración</p>
+    </div>
 
-  <div class="footer-col">
-    <h3>Explorar</h3>
-    <ul>
-      <li><a href="#">Descubrir mi viaje</a></li>
-      <li><a href="#">Catálogo de destinos</a></li>
-      <li><a href="#">Cómo funciona</a></li>
-    </ul>
-  </div>
+    <div class="footer-col">
+        <h3>Explorar</h3>
+        <ul>
+            <li><a href="cuestionario.html">Descubrir mi viaje</a></li>
+            <li><a href="catalogos.html">Catálogo de destinos</a></li>
+            <li><a href="../index.html#como-funciona">Cómo funciona</a></li>
+            <li><a href="sorprendeme.html">Sorpréndeme</a></li>
+        </ul>
+    </div>
 
-  <div class="footer-col">
-    <h3>Sobre los precios</h3>
-    <p>
-      Todos los valores son estimados en pesos colombianos y sirven solo como ejemplo educativo.
-    </p>
-  </div>
+    <div class="footer-col">
+        <h3>Planificar</h3>
+        <ul>
+            <li><a href="itinerario.html">Itinerario</a></li>
+            <li><a href="presupuesto.html">Presupuesto</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-col">
+        <h3>Sobre los precios</h3>
+        <p>
+            Todos los valores son estimados en pesos colombianos y sirven solo como ejemplo educativo.
+        </p>
+    </div>
 </footer>
 
+<script src="../js/cuestionario.js"></script>
 </body>
 </html>
