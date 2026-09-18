@@ -343,3 +343,314 @@ function inicializar() {
 }
 
 document.addEventListener('DOMContentLoaded', inicializar);
+
+
+
+/* ================================================================
+   SECCION 3: DATOS DE DESTINOS DESTACADOS
+   Estos datos son MOCK (inventados) para la version academica.
+   En una version real vendrÃ­an de una base de datos o API.
+
+   Campos:
+   - nombre: nombre del destino
+   - pais: pais donde esta
+   - tag: tipo de viaje
+   - compat: porcentaje de compatibilidad (mock)
+   - precio: precio estimado en pesos colombianos (mock)
+   - img: ruta a la imagen local (carpeta assets/img/)
+   - url: pagina de detalle del destino
+   ================================================================ */
+var DESTINOS_DESTACADOS = [
+  {
+    nombre  : 'Cartagena',
+    pais    : 'Colombia',
+    tag     : 'Caribe',
+    compat  : 94,
+    precio  : 2800000,
+    img     : 'assets/img/cartagena.jpg',
+    url     : 'pages/catalogos.html'
+  },
+  {
+    nombre  : 'Machu Picchu',
+    pais    : 'Peru',
+    tag     : 'Aventura',
+    compat  : 91,
+    precio  : 3500000,
+    img     : 'assets/img/machupicchu.jpg',
+    url     : 'pages/catalogos.html'
+  },
+  {
+    nombre  : 'Paris',
+    pais    : 'Francia',
+    tag     : 'Romantico',
+    compat  : 88,
+    precio  : 5200000,
+    img     : 'assets/img/paris.jpg',
+    url     : 'pages/catalogos.html'
+  },
+  {
+    nombre  : 'Roma',
+    pais    : 'Italia',
+    tag     : 'Cultural',
+    compat  : 85,
+    precio  : 4800000,
+    img     : 'assets/img/roma.jpg',
+    url     : 'pages/catalogos.html'
+  }
+];
+
+
+/* ================================================================
+   SECCION 3: GENERAR TARJETAS DE DESTINOS
+   Esta funcion crea el HTML de cada tarjeta de destino
+   y lo inserta en el #destinosGrid del HTML.
+
+   toLocaleString('es-CO') formatea el numero en pesos colombianos:
+   ejemplo: 2800000 -> "2.800.000"
+   ================================================================ */
+function generarTarjetasDestinos() {
+  var grid = document.getElementById('destinosGrid');
+
+  /* Si el elemento no existe (no estamos en index.html), salimos */
+  if (!grid) return;
+
+  grid.innerHTML = ''; /* Limpiar por si acaso */
+
+  DESTINOS_DESTACADOS.forEach(function(dest, i) {
+    /* Crear el elemento <a> que es el enlace de toda la tarjeta */
+    var tarjeta = document.createElement('a');
+    tarjeta.href = dest.url;
+    tarjeta.classList.add('dest-card', 'animable');
+
+    /* Retraso escalonado: cada tarjeta aparece un poco despues de la anterior */
+    tarjeta.dataset.delay = i * 120;
+
+    /* Formatear el precio en pesos colombianos */
+    var precioFormateado = '$' + dest.precio.toLocaleString('es-CO');
+
+    /* Construir el HTML interno de la tarjeta */
+    tarjeta.innerHTML =
+      '<div class="dest-card-img">' +
+        '<img src="' + dest.img + '" alt="' + dest.nombre + ', ' + dest.pais + '" loading="lazy">' +
+        '<span class="dest-compat-badge">★ ' + dest.compat + '% compat.</span>' +
+      '</div>' +
+      '<div class="dest-card-info">' +
+        '<p class="dest-card-nombre">' + dest.nombre + '</p>' +
+        '<p class="dest-card-pais">' + dest.pais + ' — ' + dest.tag + '</p>' +
+        '<div class="dest-card-footer">' +
+          '<div class="dest-card-precio">' +
+            '<span>Desde</span>' +
+            '<strong>' + precioFormateado + '</strong>' +
+          '</div>' +
+          '<span class="dest-card-link">Ver mas →</span>' +
+        '</div>' +
+      '</div>';
+
+    grid.appendChild(tarjeta);
+  });
+}
+
+
+/* ================================================================
+   SECCION 4: BUSCADOR TRADICIONAL
+   Maneja los clics en las pestanas (Vuelo / Hotel / Paquete)
+   y el envio del formulario.
+   ================================================================ */
+function inicializarBuscador() {
+  var formulario = document.getElementById('formBuscador');
+  var tabs       = document.querySelectorAll('.tab-btn');
+
+  /* Si no existe el formulario, no estamos en index.html */
+  if (!formulario) return;
+
+  /* --- Logica de las pestanas --- */
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      /* Quitar clase 'activo' de todos los tabs */
+      tabs.forEach(function(t) { t.classList.remove('activo'); });
+      /* Agregar clase 'activo' solo al tab que se hizo clic */
+      tab.classList.add('activo');
+
+      /*
+         Aqui podriamos mostrar/ocultar campos segun la pestana activa.
+         Por ahora el formulario es el mismo para todos.
+         En el futuro: si tab es "hotel", ocultar "Fecha de regreso", etc.
+      */
+    });
+  });
+
+  /* --- Envio del formulario --- */
+  formulario.addEventListener('submit', function(e) {
+    e.preventDefault(); /* Evitar que la pagina recargue (comportamiento por defecto) */
+
+    /* Leer los valores de los campos */
+    var origen    = document.getElementById('origen').value.trim();
+    var destino   = document.getElementById('destinoBusq').value.trim();
+    var fechaIda  = document.getElementById('fechaIda').value;
+    var pasajeros = document.getElementById('pasajeros').value;
+
+    /* Validacion basica: al menos origen y destino son requeridos */
+    if (!origen || !destino) {
+      alert('Por favor ingresa el origen y el destino.');
+      return;
+    }
+
+    /*
+       Construir la URL de destino con los parametros de busqueda.
+       encodeURIComponent() convierte caracteres especiales para la URL.
+       Ejemplo: "Ciudad de Mexico" -> "Ciudad%20de%20Mexico"
+    */
+    var url = 'pages/catalogos.html' +
+              '?origen='   + encodeURIComponent(origen) +
+              '&destino='  + encodeURIComponent(destino) +
+              '&ida='      + encodeURIComponent(fechaIda) +
+              '&personas=' + encodeURIComponent(pasajeros);
+
+    /* Redirigir a catalogos.html con los parametros de busqueda */
+    window.location.href = url;
+  });
+}
+
+
+/* ================================================================
+   SECCION 5: SORPRENDEME
+   Cuando el usuario hace clic en "Sorprendeme", elegimos un
+   destino al azar del array DESTINOS (el del carrusel) y lo
+   enviamos a la pagina de sorprendeme con ese destino.
+   ================================================================ */
+function inicializarSorprendeme() {
+  var boton = document.getElementById('btnSorprendeme');
+  if (!boton) return;
+
+  boton.addEventListener('click', function() {
+    /* Math.random() devuelve un numero entre 0 y 1 (sin incluir el 1) */
+    /* Multiplicamos por TOTAL y usamos Math.floor para obtener un entero */
+    /* Resultado: un indice aleatorio entre 0 y TOTAL-1 */
+    var indiceAleatorio = Math.floor(Math.random() * TOTAL);
+    var destinoElegido  = DESTINOS[indiceAleatorio];
+
+    /*
+       Efecto visual antes de navegar:
+       El boton muestra un mensaje de "cargando" por 1.5 segundos
+       y luego navega a la pagina del destino sorpresa.
+    */
+    var textoOriginal = boton.querySelector('.btn-s-texto').textContent;
+    boton.querySelector('.btn-s-texto').textContent = '✨ Eligiendo...';
+    boton.disabled = true; /* Desactivar para evitar doble clic */
+
+    setTimeout(function() {
+      /* Redirigir a sorprendeme.html con el destino elegido */
+      var url = 'pages/sorprendeme.html' +
+                '?destino=' + encodeURIComponent(destinoElegido.nombre) +
+                '&pais='    + encodeURIComponent(destinoElegido.pais);
+      window.location.href = url;
+    }, 1500);
+  });
+}
+
+
+/* ================================================================
+   SECCION 6: ANIMACIONES AL HACER SCROLL
+   IntersectionObserver es una API del navegador que nos avisa
+   cuando un elemento entra en el area visible de la pantalla.
+
+   Sin esto, tendriamos que calcular la posicion del scroll
+   manualmente en cada evento 'scroll', lo que es muy costoso
+   para el rendimiento.
+
+   Con IntersectionObserver, el navegador hace ese calculo
+   de forma eficiente y nos llama solo cuando algo cambia.
+   ================================================================ */
+function inicializarAnimacionesScroll() {
+  /*
+     Seleccionar todos los elementos con la clase .animable.
+     Son los que queremos animar al hacer scroll.
+  */
+  var elementosAnimables = document.querySelectorAll('.animable');
+
+  if (elementosAnimables.length === 0) return;
+
+  /*
+     Crear el observador.
+     La funcion callback se llama cuando un elemento
+     entra o sale del area visible.
+
+     entries: la lista de elementos que cambiaron
+     observer: el observador mismo (para dejarlo de usar si es necesario)
+  */
+  var observador = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      /*
+         entry.isIntersecting es true cuando el elemento
+         es visible en la pantalla.
+      */
+      if (entry.isIntersecting) {
+        var elemento = entry.target;
+
+        /*
+           Si el elemento tiene data-delay, esperamos ese tiempo
+           antes de agregar la clase .visible.
+           Esto crea el efecto escalonado donde cada tarjeta
+           aparece un poco despues de la anterior.
+        */
+        var retraso = parseInt(elemento.dataset.delay) || 0;
+
+        setTimeout(function() {
+          elemento.classList.add('visible');
+        }, retraso);
+
+        /*
+           Dejar de observar este elemento una vez que se animo.
+           Si no hacemos esto, el observador seguiria activo
+           y el elemento se volveria a animar si sube y baja.
+        */
+        observador.unobserve(elemento);
+      }
+    });
+  }, {
+    /*
+       threshold: 0.15 significa que el observador se activa
+       cuando el 15% del elemento es visible en pantalla.
+       Un valor de 0 se activa apenas el elemento aparece.
+       Un valor de 1 se activa cuando el elemento es 100% visible.
+    */
+    threshold: 0.15
+  });
+
+  /*
+     Decirle al observador que vigile cada elemento animable.
+  */
+  elementosAnimables.forEach(function(el) {
+    observador.observe(el);
+  });
+}
+
+
+/* ================================================================
+   AGREGAR LAS NUEVAS FUNCIONES A LA INICIALIZACION PRINCIPAL
+   ================================================================
+
+   Modificamos la funcion inicializar() que ya existe
+   para que tambien llame a las nuevas funciones.
+
+   NOTA: Este codigo REEMPLAZA la funcion inicializar() original.
+   Si copias este archivo completo, elimina la funcion
+   inicializar() anterior.
+   ================================================================ */
+document.removeEventListener('DOMContentLoaded', inicializar);
+
+document.addEventListener('DOMContentLoaded', function() {
+  /* === Inicializar el carrusel hero (ya existia) === */
+  crearTarjetas();
+  crearPuntos();
+  fondoA.style.backgroundImage = "url('" + DESTINOS[0].img + "')";
+  renderizar(0, false);
+  configurarEventos();
+  iniciarAutoavance();
+
+  /* === Inicializar las nuevas secciones === */
+  generarTarjetasDestinos();   /* SecciÃ³n 3: tarjetas de destinos */
+  inicializarBuscador();       /* SecciÃ³n 4: formulario de bÃºsqueda */
+  inicializarSorprendeme();    /* SecciÃ³n 5: botÃ³n sorprÃ©ndeme */
+  inicializarAnimacionesScroll(); /* SecciÃ³n 6: animaciones scroll */
+});
