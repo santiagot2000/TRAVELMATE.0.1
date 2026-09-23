@@ -491,7 +491,7 @@ function inicializarBuscador() {
 
     /* Validacion basica: al menos origen y destino son requeridos */
     if (!origen || !destino) {
-      alert('Por favor ingresa el origen y el destino.');
+      mostrarModal('Completa tu ruta', 'Por favor ingresa la ciudad de origen y el destino que deseas explorar.', '✈️');
       return;
     }
 
@@ -652,5 +652,55 @@ document.addEventListener('DOMContentLoaded', function() {
   generarTarjetasDestinos();   /* SecciÃ³n 3: tarjetas de destinos */
   inicializarBuscador();       /* SecciÃ³n 4: formulario de bÃºsqueda */
   inicializarSorprendeme();    /* SecciÃ³n 5: botÃ³n sorprÃ©ndeme */
-  inicializarAnimacionesScroll(); /* SecciÃ³n 6: animaciones scroll */
+  inicializarAnimacionesScroll();
+  inicializarEventosModal(); /* SecciÃ³n 6: animaciones scroll */
 });
+
+
+
+/* ================================================================
+   MODAL PERSONALIZADO DE ALERTA
+   Reemplaza los alert() tradicionales por un modal centrado y elegante
+   ================================================================ */
+function mostrarModal(titulo, mensaje, icono) {
+  var modal = document.getElementById('modalAlerta');
+  var elTitulo = document.getElementById('modalTitulo');
+  var elMensaje = document.getElementById('modalMensaje');
+  var elIcono = document.getElementById('modalIcono');
+
+  if (!modal) return;
+
+  if (titulo && elTitulo) elTitulo.textContent = titulo;
+  if (mensaje && elMensaje) elMensaje.textContent = mensaje;
+  if (icono && elIcono) elIcono.textContent = icono;
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModal() {
+  var modal = document.getElementById('modalAlerta');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function inicializarEventosModal() {
+  var modal = document.getElementById('modalAlerta');
+  var btnCerrar = document.getElementById('btnCerrarModal');
+  var btnAceptar = document.getElementById('btnAceptarModal');
+
+  if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+  if (btnAceptar) btnAceptar.addEventListener('click', cerrarModal);
+
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) cerrarModal();
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarModal();
+  });
+}

@@ -128,5 +128,5 @@ El proyecto cuenta con reglas de adaptación específicas:
 ## 💡 7. Próximos Pasos Sugeridos
 
 1. [ ] Conectar la página de **Cuestionario** (`pages/cuestionario.html`) para calcular respuestas en tiempo real.
-2. [ ] Desarrollar la vista de **Catálogo Detallado** con filtros por presupuesto y tipo de clima/turismo.
+2. [x] Desarrollar la vista de **Catálogo Detallado** con filtros por presupuesto y tipo de clima/turismo.
 3. [ ] Implementar el generador de **Itinerarios y Presupuestos** dinámico.

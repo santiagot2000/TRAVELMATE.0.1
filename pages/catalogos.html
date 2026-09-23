@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Destinos - TravelMate</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- ===== ENCABEZADO ===== -->
+<header class="encabezado">
+    <div class="contenedor-navegacion">
+        <h1 class="logo"><a href="../index.html">TravelMate</a></h1>
+        <nav>
+            <div class="nav-item">
+                <a href="../index.html" class="nav-link" style="text-decoration: none;">Inicio</a>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Descubrir <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="cuestionario.html">Cuestionario</a>
+                    <a href="preferencias.html">Preferencias</a>
+                    <a href="presupuestos.html">Presupuestos</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Destinos <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <!-- <a href="catalogos.html">Catálogo</a> -->
+                    <a href="filtros.html">Filtros</a>
+                    <a href="detalle.html">Detalle</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Recomendaciones <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="compatibilidad.html">Compatibilidad</a>
+                    <a href="sorprendeme.html">Sorpréndeme</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Planificador <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="itinerario.html">Itinerario</a>
+                    <a href="actividades.html">Actividades</a>
+                    <a href="presupuesto.html">Presupuesto</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Perfil <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="cuenta.html">Mi cuenta</a>
+                    <a href="viajes.html">Mis viajes</a>
+                    <a href="favoritos.html">Favoritos</a>
+                </div>
+            </div>
+            <button class="boton-principal">
+                <a href="login.html">Ingresar</a>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<!-- ===== HERO DEL CATÁLOGO ===== -->
+<section class="catalogo-hero">
+    <div class="seccion-contenedor">
+        <span class="seccion-etiqueta">Explora a tu estilo</span>
+        <h2 class="catalogo-hero-titulo">Catálogo de Destinos</h2>
+        <p class="catalogo-hero-sub">
+            Descubre lugares inolvidables, compara presupuestos en pesos colombianos y filtra por las experiencias que más te apasionan.
+        </p>
+
+        <!-- Barra de Búsqueda Interactiva -->
+        <div class="catalogo-buscador-caja">
+            <span class="buscador-icono">🔍</span>
+            <input type="text" id="inputBuscar" placeholder="Busca por ciudad (ej. Cartagena, París, Roma) o país..." autocomplete="off">
+            <button type="button" id="btnLimpiarBusqueda" class="btn-limpiar" style="display: none;" title="Limpiar búsqueda">✕</button>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECCIÓN DE FILTROS Y RESULTADOS ===== -->
+<main class="catalogo-seccion">
+    <div class="seccion-contenedor">
+
+        <!-- Barra de Control: Filtros y Orden -->
+        <div class="catalogo-controles">
+
+            <!-- Filtro de Categorías / Experiencias -->
+            <div class="filtros-categorias" id="contenedorFiltros">
+                <button class="filtro-btn activo" data-categoria="todos">Todos</button>
+                <button class="filtro-btn" data-categoria="playa">🏖️ Playa</button>
+                <button class="filtro-btn" data-categoria="cultura">🏛️ Cultura</button>
+                <button class="filtro-btn" data-categoria="aventura">🏔️ Aventura</button>
+                <button class="filtro-btn" data-categoria="gastronomia">🍽️ Gastronomía</button>
+                <button class="filtro-btn" data-categoria="romance">🍷 Romance</button>
+                <button class="filtro-btn" data-categoria="fiesta">🎉 Fiesta</button>
+            </div>
+
+            <!-- Controles Secundarios: Presupuesto y Orden -->
+            <div class="filtros-secundarios">
+                <div class="filtro-select-grupo">
+                    <label for="selectPresupuesto">Presupuesto:</label>
+                    <select id="selectPresupuesto" class="catalogo-select">
+                        <option value="todos">Cualquier presupuesto</option>
+                        <option value="economico">Económico (hasta $3.000.000 COP)</option>
+                        <option value="moderado">Moderado ($3M - $5M COP)</option>
+                        <option value="premium">Premium (+ de $5.000.000 COP)</option>
+                    </select>
+                </div>
+
+                <div class="filtro-select-grupo">
+                    <label for="selectOrden">Ordenar por:</label>
+                    <select id="selectOrden" class="catalogo-select">
+                        <option value="recomendados">Más recomendados</option>
+                        <option value="compatibilidad">Mayor compatibilidad ★</option>
+                        <option value="precio-menor">Menor precio</option>
+                        <option value="precio-mayor">Mayor precio</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Barra Informativa: Contador de Resultados -->
+        <div class="catalogo-info-barra">
+            <span id="contadorResultados" class="contador-texto">Mostrando destinos...</span>
+            <span id="tagFiltroActivo" class="tag-filtro" style="display: none;"></span>
+        </div>
+
+        <!-- Grid de Tarjetas de Destinos -->
+        <div class="dest-cards-grid" id="catalogoGrid">
+            <!-- Se llena dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Estado Vacío (Sin Resultados) -->
+        <div class="catalogo-vacio" id="estadoVacio" style="display: none;">
+            <div class="vacio-icono">🗺️</div>
+            <h3>No encontramos destinos con esos filtros</h3>
+            <p>Prueba buscando con otra palabra o restablece los filtros para ver todos los lugares disponibles.</p>
+            <button type="button" class="boton-cta" id="btnRestablecerFiltros" style="margin-top: 18px;">
+                🔄 Restablecer todos los filtros
+            </button>
+        </div>
+
+    </div>
+</main>
+
+<!-- ===== PIE DE PÁGINA ===== -->
+<footer>
+    <div class="footer-brand">
+        <div class="footer-logo">TravelMate</div>
+        <p class="footer-desc">
+            Hacemos que planear un viaje sea claro y sencillo, para jóvenes y para adultos mayores.
+        </p>
+        <p class="footer-tag">Prototipo académico · Datos de demostración</p>
+    </div>
+
+    <div class="footer-col">
+        <h3>Explorar</h3>
+        <ul>
+            <li><a href="cuestionario.html">Descubrir mi viaje</a></li>
+            <li><a href="catalogos.html">Catálogo de destinos</a></li>
+            <li><a href="../index.html#como-funciona">Cómo funciona</a></li>
+            <li><a href="sorprendeme.html">Sorpréndeme</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-col">
+        <h3>Planificar</h3>
+        <ul>
+            <li><a href="itinerario.html">Itinerario</a></li>
+            <li><a href="presupuesto.html">Presupuesto</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-col">
+        <h3>Sobre los precios</h3>
+        <p>
+            Todos los valores son estimados en pesos colombianos y sirven solo como ejemplo educativo.
+        </p>
+    </div>
+</footer>
+
+<script src="../js/catalogo.js"></script>
+</body>
+</html>

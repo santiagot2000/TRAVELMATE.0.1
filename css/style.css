@@ -1968,3 +1968,391 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ================================================================
+   TRAVELMATE - Estilos del Catálogo de Destinos
+   ================================================================ */
+
+/* Hero del Catálogo */
+.catalogo-hero {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2012 100%);
+    padding: 60px 0 50px;
+    text-align: center;
+    color: #ffffff;
+    border-bottom: 2px solid #ecdcc0;
+}
+
+.catalogo-hero-titulo {
+    font-family: Georgia, serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-style: italic;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 8px 0 12px;
+}
+
+.catalogo-hero-sub {
+    font-size: clamp(14.5px, 1.8vw, 17px);
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 650px;
+    margin: 0 auto 30px;
+    line-height: 1.5;
+}
+
+/* Caja de Búsqueda */
+.catalogo-buscador-caja {
+    position: relative;
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 6px 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 2px solid #f1d56f;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.catalogo-buscador-caja:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(246, 168, 0, 0.35);
+    border-color: #e8792c;
+}
+
+.buscador-icono {
+    font-size: 20px;
+    margin-right: 12px;
+    user-select: none;
+}
+
+.catalogo-buscador-caja input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #1a1205;
+    background: transparent;
+    padding: 10px 0;
+}
+
+.catalogo-buscador-caja input::placeholder {
+    color: #9a8a70;
+}
+
+.btn-limpiar {
+    background: #f0e6cc;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    color: #5a4a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-limpiar:hover {
+    background: #e0d0ac;
+}
+
+/* Sección de Controles y Grid */
+.catalogo-seccion {
+    padding: 40px 0 80px;
+}
+
+.catalogo-controles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ebd9b5;
+}
+
+/* Botones de Categorías */
+.filtros-categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filtro-btn {
+    padding: 9px 18px;
+    background: #fffdf7;
+    border: 1px solid #ecdcc0;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a3b1e;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.filtro-btn:hover {
+    border-color: #f6a800;
+    transform: translateY(-1px);
+}
+
+.filtro-btn.activo {
+    background: #f6a800;
+    border-color: #e8792c;
+    color: #1a1205;
+    font-weight: bold;
+    box-shadow: 0 4px 14px rgba(246, 168, 0, 0.30);
+}
+
+/* Filtros Secundarios (Presupuesto y Orden) */
+.filtros-secundarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+}
+
+.filtro-select-grupo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filtro-select-grupo label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #5a4a2e;
+}
+
+.catalogo-select {
+    padding: 8px 14px;
+    border: 1px solid #ecdcc0;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #2a1f0e;
+    font-size: 13.5px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.catalogo-select:focus {
+    border-color: #f6a800;
+}
+
+/* Barra Informativa de Resultados */
+.catalogo-info-barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.contador-texto {
+    font-size: 14.5px;
+    color: #6a5a3e;
+    font-weight: 500;
+}
+
+.tag-filtro {
+    font-size: 12px;
+    background: #fdf2d9;
+    color: #8a6a1e;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid #ecd59e;
+}
+
+/* Elementos Extra de las Tarjetas en el Catálogo */
+.dest-duracion-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.70);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(3px);
+}
+
+.dest-tag-mini {
+    display: inline-block;
+    color: #e8792c;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.dest-card-desc-corta {
+    font-size: 13px;
+    color: #6a5a3e;
+    line-height: 1.45;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Estado Vacío */
+.catalogo-vacio {
+    text-align: center;
+    padding: 70px 20px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px dashed #dcd1ba;
+    margin: 20px 0;
+}
+
+.vacio-icono {
+    font-size: 50px;
+    margin-bottom: 14px;
+}
+
+.catalogo-vacio h3 {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    color: #1a1205;
+    margin-bottom: 8px;
+}
+
+.catalogo-vacio p {
+    font-size: 14.5px;
+    color: #7a6a4e;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Adaptación Responsive */
+@media (max-width: 900px) {
+    .catalogo-controles {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filtros-secundarios {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 600px) {
+    .filtros-secundarios {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filtro-select-grupo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .catalogo-select {
+        width: 100%;
+    }
+}
+
+
+
+/* ================================================================
+   TRAVELMATE - Estilos del Modal Personalizado
+   ================================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 8, 4, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInModal 0.25s ease forwards;
+}
+
+.modal-caja {
+    position: relative;
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 38px 32px 32px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    border: 2px solid #ecdcc0;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    animation: popModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-cerrar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f7f1e4;
+    border: none;
+    font-size: 14px;
+    color: #6a5a3e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.modal-cerrar:hover {
+    background: #ecdcc0;
+    transform: scale(1.1);
+}
+
+.modal-icono {
+    font-size: 48px;
+    margin-bottom: 12px;
+    line-height: 1;
+    animation: pulsoIcono 0.6s ease;
+}
+
+.modal-titulo {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #1a1205;
+    margin-bottom: 10px;
+}
+
+.modal-mensaje {
+    font-size: 15px;
+    color: #6a5a3e;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.modal-btn-accion {
+    width: 100%;
+    padding: 13px 20px;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes popModal {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulsoIcono {
+    0%   { transform: scale(0.6); }
+    70%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
