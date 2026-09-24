@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TravelMate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #F7F3EE;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 480px;
+    }
+
+    /* Logo */
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: #B0956E;
+      text-transform: uppercase;
+      margin-bottom: 64px;
+    }
+
+    /* Icono central */
+    .icon {
+      font-size: 48px;
+      margin-bottom: 32px;
+      display: block;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* Título */
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 8vw, 3.6rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: #2C2520;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    h1 em {
+      font-style: italic;
+      color: #B0956E;
+    }
+
+    /* Subtítulo */
+    p.sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: #8C7B6E;
+      line-height: 1.75;
+      margin-bottom: 52px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 72px;
+      font-size: 11px;
+      color: #C0B4A8;
+      letter-spacing: 0.05em;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="logo">TravelMate</div>
+
+  <span class="icon">🌍</span>
+
+  <h1>Algo <em>hermoso</em><br>está en camino.</h1>
+
+  <p class="sub">Estamos preparando tu nueva forma<br>de explorar el mundo.</p>
+
+
+  <footer>© 2026 TravelMate &nbsp;·&nbsp; Todos los derechos reservados</footer>
+
+</div>
+
+<script>
+  function handleSubmit() {
+    const input   = document.getElementById('emailInput');
+    const confirm = document.getElementById('confirm');
+    if (!input.value.includes('@')) {
+      input.style.borderColor = '#E07070';
+      setTimeout(() => input.style.borderColor = '#DDD4C8', 1500);
+      return;
+    }
+    input.disabled = true;
+    input.style.opacity = '0.5';
+    confirm.classList.add('show');
+  }
+</script>
+
+</body>
+</html>
