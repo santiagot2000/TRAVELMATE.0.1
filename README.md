@@ -1,4 +1,4 @@
-# 🌍 TravelMate — Tu Compañero Inteligente de Viajes
+# 🌍 TravelMate — Documentación Técnica y Funcional del Aplicativo
 
 > **Slogan:** *"No sabes a dónde viajar. Descubre tu próximo viaje."*  
 > **Diferencial:** *"Las demás plataformas empiezan preguntando '¿A dónde quieres ir?'; TravelMate empieza preguntando '¿Qué quieres vivir?'"*
@@ -10,123 +10,152 @@
 * **Institución:** Universidad Católica Luis Amigó / CESDE
 * **Semestre:** Segundo Semestre
 * **Asignatura:** Electiva 1 - Programación Web
-* **Proyecto:** TravelMate (Prototipo Front-End v0.4)
+* **Proyecto:** TravelMate (Prototipo Front-End v1.2)
 * **Stack Tecnológico:** HTML5 Semántico, CSS3 (perspectiva 3D, Flexbox y Grid) y JavaScript Vanilla (sin frameworks ni librerías externas).
 
 ---
 
-## 🧭 2. Propósito y Enfoque
+## ⚙️ 2. Especificación de Requerimientos Funcionales (Funciones del Aplicativo)
 
-TravelMate es una plataforma web orientada a transformar la forma en que las personas planifican sus vacaciones. A diferencia de las agencias tradicionales que asumen que el usuario ya sabe a dónde ir, TravelMate analiza:
-1. **La experiencia deseada:** Aventura, descanso en playa, inmersión cultural, gastronomía o romance.
-2. **El presupuesto real:** Estimación y desglose en pesos colombianos (COP).
-3. **El tipo de compañía:** Viajero solitario, en pareja, con amigos, familia o adultos mayores.
-4. **Compatibilidad personalizada:** Porcentaje de afinidad calculado entre el perfil del viajero y cada destino.
+### **RF-01: Hero Carrusel 3D e Impacto Visual Inicial**
+* **Descripción:** Presentación interactiva de destinos destacados en 3D en la pantalla de inicio.
+* **Comportamiento:** Las tarjetas giran en perspectiva 3D (`transform: scale() rotateY()`). La foto de fondo de pantalla completa cambia sincronizadamente con efecto de fundido fotográfico (*crossfade/blur*).
+* **Entradas/Eventos:** Clic en tarjetas laterales, botones de dirección, flechas del teclado (`←` / `→`), gestos táctiles (*swipe*) o temporizador de autoavance (5.5s).
+
+### **RF-02: Motor de Afinidades y Cuestionario Interactivo**
+* **Descripción:** Algoritmo en 4 pasos que calcula el porcentaje de compatibilidad entre las preferencias del usuario y los destinos.
+* **Comportamiento:** 
+  1. *Paso 1:* Captura origen y duración del viaje.
+  2. *Paso 2:* Define la compañía (Solo, Pareja, Amigos, Familia).
+  3. *Paso 3:* Define el rango de presupuesto en pesos colombianos (COP).
+  4. *Paso 4:* Selección múltiple de intereses (Playa, Cultura, Gastronomía, Aventura, Romance, Fiesta, Naturaleza).
+* **Salida:** Animación de cálculo (*matching*) y despliegue del **Top 3 de destinos recomendados** con medallas (🥇, 🥈, 🥉), insignias de compatibilidad (ej. ★ 95%) y desglose económico.
+
+### **RF-03: Catálogo Multicriterio con Búsqueda en Tiempo Real**
+* **Descripción:** Módulo de exploración global con 28 destinos de los 5 continentes (América del Sur, América del Norte, Europa, Asia, África y Oceanía).
+* **Comportamiento:** 
+  * *Búsqueda instantánea:* Filtra en vivo mientras el usuario escribe la ciudad o país en el buscador.
+  * *Filtrado por categorías:* Botones tipo chip (*Playa, Cultura, Aventura, Gastronomía, Romance, Fiesta*).
+  * *Filtro de presupuesto:* Selector por rangos en COP (*Económico < $3M, Moderado $3M-$5M, Premium > $5M*).
+  * *Ordenamiento:* Selector dinámico por *Recomendados, Mayor compatibilidad, Menor precio y Mayor precio*.
+
+### **RF-04: Sistema de Modales Personalizados (Alertas)**
+* **Descripción:** Sustitución de los `alert()` nativos por un modal emergente centrado.
+* **Comportamiento:** Muestra una ventana con fondo desenfocado (*backdrop blur*), icono, mensaje claro y botón de acción. Se cierra mediante botón, clic externo o tecla `Escape`.
+
+### **RF-05: Enlace Dinámico por URL (Deep Linking)**
+* **Descripción:** Conexión transparente entre el buscador de la página de inicio y el catálogo.
+* **Comportamiento:** Al enviar una búsqueda desde el formulario tradicional de la home, el catálogo lee los parámetros de la URL (`?destino=...`) y aplica la búsqueda de inmediato al cargar.
+
+### **RF-06: Vista Detallada de Destino e Inteligencia de Viaje (`pages/detalle.html`)**
+* **Descripción:** Pantalla detallada de cada destino con desglose económico, itinerario diario y tres secciones especializadas:
+  1. *Sección 7 — Gastronomía Típica:* Muestra los platillos autóctonos de la región con precios promedios e íconos temáticos.
+  2. *Sección 8 — Festividades y Calendario Cultural:* Detecta en tiempo real el mes actual del sistema (`new Date().getMonth()`) para destacar los carnavales y eventos vigentes en la fecha de consulta, junto a un calendario anual completo.
+  3. *Sección 9 — Las 4 Estaciones del Año:* Muestra la guía climática de Primavera 🌸, Verano ☀️, Otoño 🍁 e Invierno ❄️ con rango de meses, temperaturas y recomendaciones de vestimenta ("🎒 Qué llevar").
+
+### **RF-07: Modo Oscuro y Navegación Flotante Global (`js/global.js`)**
+* **Descripción:** Widget flotante ubicado en la parte inferior derecha de todas las pantallas con dos controles esenciales:
+  1. *Alternador de Modo Oscuro (🌙 / ☀️):* Cambia los colores del tema de la aplicación con persistencia en `localStorage`.
+  2. *Botón Volver Arriba (⬆️):* Flecha inteligente que aparece dinámicamente cuando el usuario desciende más de 280px en el scroll y realiza un movimiento suave (*smooth scroll*) hacia el inicio de la página.
 
 ---
 
-## 📁 3. Estructura de Archivos y Carpetas
+## 💻 3. Diccionario de Funciones del Código (Manual de Métodos JavaScript)
 
-```text
-TRAVELMATE.0.1/
-├── index.html               # Página principal (Landing Page con 6 secciones completas)
-├── README.md                # Documentación oficial y bitácora del proyecto
-├── css/
-│   ├── style.css            # Hoja de estilos principal, responsive y comentada
-│   └── style.backup.css     # Copia de seguridad de estilos previa
-├── js/
-│   └── script.js            # Lógica completa: carrusel 3D, buscador, sorpréndeme y scroll
-├── assets/
-│   └── img/                 # Imágenes locales en alta resolución (sin enlaces externos)
-│       ├── cartagena.jpg
-│       ├── machupicchu.jpg
-│       ├── mexicocity.jpg
-│       ├── buenosaires.jpg
-│       ├── paris.jpg
-│       ├── barcelona.jpg
-│       └── roma.jpg
-└── pages/                   # Módulos y vistas del proyecto
-    ├── cuestionario.html    # Motor de preguntas para descubrir el viaje
-    ├── catalogos.html       # Catálogo general de destinos y filtros
-    ├── preferencias.html    # Configuración de intereses del viajero
-    ├── presupuestos.html    # Desglose y estimación económica
-    ├── itinerario.html      # Planificador día a día
-    ├── actividades.html     # Actividades y experiencias recomendadas
-    ├── compatibilidad.html  # Detalle de cálculo de afinidad
-    ├── sorprendeme.html     # Destino sorpresa aleatorio
-    ├── favoritos.html       # Guardados del usuario
-    ├── viajes.html          # Historial de viajes planificados
-    ├── cuenta.html          # Panel de perfil de usuario
-    └── login.html           # Inicio de sesión / Registro
+### **A. Módulo Global (`js/global.js`)**
+
+* **`aplicarTema(esOscuro)`**: Alterna la clase `modo-oscuro` en el `body`, actualiza el icono del botón (🌙 / ☀️) y guarda la preferencia en `localStorage.setItem('travelmate_tema', ...)`.
+* **`Inyección de Contenedor Flotante`**: Crea dinámicamente el widget `#flotantesDerecha` en el DOM para alojar el botón de Modo Oscuro y el botón Volver Arriba en todas las páginas.
+* **`Evento Scroll & Smooth Scroll`**: Detecta el desplazamiento del usuario (`window.scrollY > 280`) para mostrar u ocultar la flecha flotante y ejecuta `window.scrollTo({ top: 0, behavior: 'smooth' })`.
+
+### **B. Módulo Principal (`js/script.js`)**
+
+* **`crearTarjetas()`**: Genera dinámicamente en el DOM las tarjetas del carrusel 3D a partir del arreglo de datos `DESTINOS`.
+* **`renderizar(nuevoIndice, animar)`**: Calcula la distancia relativa de cada tarjeta al centro y asigna las clases CSS de posición (`pos-center`, `pos-left`, `pos-right`, etc.).
+* **`actualizarFondo()`**: Intercambia la visibilidad de dos contenedores de fondo (`#fondoA` y `#fondoB`) aplicando *crossfade* de opacidad.
+* **`iniciarAutoavance()` / `reiniciarAutoavance()`**: Maneja el temporizador de rotación automática del carrusel cada 5.5 segundos.
+* **`mostrarModal(titulo, mensaje, icono)`**: Despliega el modal emergente con fondo bloqueado y contenido dinámico.
+* **`cerrarModal()`**: Oculta el modal de alerta y restaura el scroll.
+* **`inicializarAnimacionesScroll()`**: Utiliza la API `IntersectionObserver` para activar la clase `.visible` en elementos `.animable` a medida que el usuario hace scroll.
+
+### **C. Módulo de Cuestionario (`js/cuestionario.js`)**
+
+* **`actualizarWizard()`**: Gestiona el paso activo (1 al 4) del cuestionario, actualizando la barra de progreso y la visibilidad de los botones *Anterior / Siguiente / Finalizar*.
+* **`calcularCompatibilidad(respuestas)`**: Algoritmo de ponderación que evalúa presupuesto, compañía e intereses para asignar un porcentaje de afinidad (72% a 98%) a cada destino.
+* **`mostrarResultados(mejoresMatches, respuestas)`**: Construye el HTML de las tarjetas ganadoras con sus respectivas medallas e información presupuestal.
+
+### **D. Módulo de Catálogo (`js/catalogo.js`)**
+
+* **`aplicarFiltros()`**: Evalúa simultáneamente el texto del buscador, la categoría seleccionada, el rango de presupuesto y aplica el criterio de ordenamiento activo sobre el arreglo `CATALOGO_DESTINOS`.
+* **`renderizarDestinos(destinos)`**: Renderiza las tarjetas resultantes en `#catalogoGrid` o muestra la vista `#estadoVacio` si no hay coincidencias.
+
+### **E. Módulo de Vista de Detalle (`js/detalle.js`)**
+
+* **`obtenerDetalleDestino(nombreBuscado)`**: Busca la información enriquecida del destino en `BASE_DETALLES` o genera un paquete completo de respaldo asignando imagen única desde `MAPA_IMAGENES` y detectando el mes real del sistema.
+* **`cargarPantallaDetalle(datosDestino)`**: Inyecta dinámicamente en el DOM los datos del banner hero, rápida información general, presupuesto desglosado, itinerario timeline, tarjetas gastronómicas (Sección 7), festividad del mes real y calendario anual (Sección 8), y las tarjetas de las 4 estaciones del año (Sección 9).
+
+---
+
+## 🗄️ 4. Modelo de Datos del Aplicativo (Esquema de Destino)
+
+Cada destino dentro del sistema está representado por un objeto estandarizado (compatible con futuras tablas en MySQL / SQL Server):
+
+```javascript
+{
+  id: String,             // Identificador único (ej. 'cartagena')
+  nombre: String,         // Nombre oficial del destino
+  pais: String,           // País de ubicación
+  img: String,            // Ruta a la imagen local en assets/img/
+  tag: String,            // Etiqueta temática (ej. '#Caribe')
+  categorias: Array,      // Categorías asociadas (['playa', 'cultura', 'gastronomia'])
+  precio: Number,         // Precio estimado base en pesos colombianos (COP)
+  compatibilidad: Number, // Porcentaje de afinidad base (ej. 95)
+  duracion: String,       // Duración sugerida (ej. '3 a 5 días')
+  descripcion: String     // Resumen descriptivo del destino
+}
 ```
 
 ---
 
-## 🚀 4. Módulos Implementados en la Página Principal (`index.html`)
+## 📁 5. Estructura de Archivos del Proyecto
 
-### 1. Encabezado Flotante y Menú Desplegable (Dropdowns)
-* Header con clase `encabezado--hero` que flota con fondo transparente sobre la sección oscura.
-* Logotipo de marca en tipografía *Georgia italic*.
-* Menús desplegables en cascada (*Hover Dropdowns*) organizados en: Descubrir, Destinos, Recomendaciones, Planificador y Perfil.
-* Botón destacado de ingreso rápido (*Login*).
-
-### 2. Sección 1: Hero con Carrusel 3D Interactivo
-* **Efecto visual 3D:** 7 destinos organizados en perspectiva cónica y profundidad con `transform: scale()` y `rotateY()`.
-* **Crossfade de fondo dinámico:** La imagen de fondo de pantalla completa cambia sincronizadamente con la tarjeta central mediante un suave fundido fotográfico (*blur* y atenuación de contraste).
-* **Navegación multimodal:** Flechas laterales con efecto cristal (*glassmorphism*), cápsulas indicadoras inferiores, teclas de dirección (`←` / `→`) y soporte para gestos táctiles (*swipe*) en móviles.
-* **Autoavance inteligente:** Rota cada 5.5 segundos y se pausa automáticamente al colocar el cursor encima.
-
-### 3. Sección 2: ¿Cómo funciona? (El Proceso en 3 Pasos)
-* Tarjetas estructuradas con números de gran formato y emojis descriptivos:
-  * **01 🎯 Cuéntanos qué quieres vivir:** Cuestionario de gustos, tiempo y presupuesto.
-  * **02 🔍 TravelMate analiza tu perfil:** Motor de cálculo y afinidad.
-  * **03 ✈️ Recibe tu viaje perfecto:** Destinos recomendados, itinerario sugerido y costo en COP.
-
-### 4. Sección 3: Destinos Destacados (Grid Dinámico en JS)
-* Tarjetas generadas mediante JavaScript desde un arreglo de datos locales (`DESTINOS_DESTACADOS`).
-* Cada tarjeta cuenta con imagen local, etiqueta de categoría, insignia de **porcentaje de compatibilidad** (ej. ★ 94%), precio base formateado en moneda colombiana (`COP`) y botón de exploración.
-
-### 5. Sección 4: Buscador Tradicional
-* Pensado para aquellos viajeros que ya saben exactamente a dónde quieren ir.
-* Selector de pestañas para **Vuelo ✈️**, **Hotel 🏨** y **Paquete 🎒**.
-* Formulario completo con campos de Origen, Destino, Fechas de ida y vuelta, y número de Pasajeros con validación nativa en JavaScript.
-
-### 6. Sección 5: Modo "Sorpréndeme" ✨
-* Diseñado para el usuario que desea explorar sin ataduras.
-* Fondo nocturno inmersivo con botón animado con efecto de pulso luminoso (`@keyframes pulsarBoton`).
-* Al dar clic, el motor en `script.js` selecciona aleatoriamente un destino del catálogo y redirige con los parámetros listos.
-
-### 7. Sección 6: El Diferencial TravelMate (Tabla Comparativa)
-* Comparación frente a frente: **Otras Agencias vs. TravelMate**.
-* Resalta la transición de *"buscar ciudades en una lista interminable"* hacia *"descubrir vivencias personalizadas con plan y presupuesto resuelto"*.
-
-### 8. Pie de Página (Footer)
-* Distribución modular en 4 columnas: Marca, Enlaces de exploración, Herramientas de planificación y Nota legal/académica sobre los valores estimados.
+```text
+TRAVELMATE.0.1/
+├── index.html               # Landing Page (Hero 3D, 6 Secciones y Modal)
+├── README.md                # Documentación Técnica y Funcional Oficial
+├── css/
+│   ├── style.css            # Estilos globales, carrusel 3D, modo oscuro y botón volver arriba
+│   └── style.backup.css     # Copia de seguridad de estilos
+├── js/
+│   ├── global.js            # Lógica global: Modo oscuro (localStorage) y botón flotante Volver Arriba
+│   ├── script.js            # Lógica de la home, carrusel 3D, modal y scroll
+│   ├── cuestionario.js      # Lógica del wizard de afinidades y matching
+│   ├── catalogo.js          # Lógica de búsqueda, filtros y ordenamiento del catálogo
+│   └── detalle.js           # Lógica dinámica de detalles, gastronomía, eventos en tiempo real y 4 estaciones
+├── assets/
+│   └── img/                 # 28 Imágenes locales en alta definición para todos los destinos
+└── pages/
+    ├── cuestionario.html    # Motor de preguntas para descubrir el viaje
+    ├── catalogos.html       # Catálogo global de destinos (28 destinos)
+    ├── detalle.html         # Vista detallada del destino seleccionado
+    └── ...                  # Módulos secundarios
+```
 
 ---
 
-## 📱 5. Diseño Adaptativo (Responsive Design)
+## 🛠️ 6. Historial de Versiones (Changelog)
 
-El proyecto cuenta con reglas de adaptación específicas:
-* **Escritorio (> 1200px):** Carrusel completo en 5 niveles de profundidad visible, menús desplegables y cuadrícula de 4 columnas.
-* **Tablets (768px - 1024px):** Ajuste de dimensiones de tarjetas, cuadrícula de destinos a 2 columnas y pasos secuenciales reorganizados.
-* **Móviles (<= 600px):** Navegación simplificada, carrusel focalizado en tarjeta activa y laterales inmediatas, pasos en columna vertical con conectores rotados a 90° y botones táctiles optimizados (> 44px de área de pulsación).
-
----
-
-## 🛠️ 6. Bitácora de Versiones y Cambios (Changelog)
-
-| Versión | Fecha | Descripción de Cambios Realizados |
+| Versión | Fecha | Resumen de Funcionalidades Implementadas |
 | :--- | :--- | :--- |
-| **v0.1** | Inicial | Estructura base del proyecto y creación de las páginas HTML secundarias. |
-| **v0.2** | Sep 2026 | Creación del Hero Carrusel 3D con crossfade de fondo sincronizado. |
-| **v0.3** | Sep 2026 | Descarga y vinculación de imágenes locales en `assets/img/`. Eliminación de dependencias de internet. |
-| **v0.4** | Sep 2026 | Limpieza de entidades HTML por emojis nativos (🎯, 🔍, ✈️). Implementación de las 6 secciones completas en `index.html` (Cómo funciona, Destinos en JS, Buscador, Sorpréndeme, Comparativa y Animaciones de Scroll). |
-
----
-
-## 💡 7. Próximos Pasos Sugeridos
-
-1. [ ] Conectar la página de **Cuestionario** (`pages/cuestionario.html`) para calcular respuestas en tiempo real.
-2. [x] Desarrollar la vista de **Catálogo Detallado** con filtros por presupuesto y tipo de clima/turismo.
-3. [ ] Implementar el generador de **Itinerarios y Presupuestos** dinámico.
+| **v0.1** | Inicial | Estructura base del proyecto y plantillas iniciales. |
+| **v0.2** | Sep 2026 | Hero Carrusel 3D con crossfade de fondo en la home. |
+| **v0.3** | Sep 2026 | Integración de imágenes locales en `assets/img/`. |
+| **v0.4** | Sep 2026 | Implementación de las 6 secciones principales en `index.html`. |
+| **v0.5** | Sep 2026 | Módulo interactivo de Cuestionario (`cuestionario.html` y `cuestionario.js`) con motor de afinidad. |
+| **v0.6** | Sep 2026 | Módulo de Catálogo de Destinos (`catalogos.html` y `catalogo.js`) con filtros y ordenamiento. |
+| **v0.7** | Sep 2026 | Reemplazo de `alert()` por sistema de Modales Interactivos personalizados (`mostrarModal()`). |
+| **v0.8** | Sep 2026 | Expansión del catálogo a 24 destinos internacionales. |
+| **v0.9** | Sep 2026 | Cobertura global en los 5 continentes (28 destinos) y redacción de la **Documentación Técnica y Funcional Formal**. |
+| **v1.0** | Sep 2026 | Implementación de la Vista de Detalle (`detalle.html`), Sección 7 (Gastronomía) y Sección 8 (Festividades). |
+| **v1.1** | Sep 2026 | Detección del mes actual (`new Date()`), 28 imágenes únicas por destino y **Sección 9: Las 4 Estaciones del Año**. |
+| **v1.2** | Sep 2026 | Módulo global `js/global.js`: **Modo Oscuro (Dark Mode)** con persistencia en `localStorage` y **Botón Flotante Flecha "Volver Arriba"** (`window.scrollTo({ top: 0, behavior: 'smooth' })`). |

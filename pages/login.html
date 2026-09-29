@@ -2,120 +2,321 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TravelMate</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelMate — Ingresar o Crear Cuenta</title>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #F7F3EE;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .container {
-      text-align: center;
-      padding: 40px 24px;
-      max-width: 480px;
-    }
-
-    /* Logo */
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.3em;
-      color: #B0956E;
-      text-transform: uppercase;
-      margin-bottom: 64px;
-    }
-
-    /* Icono central */
-    .icon {
-      font-size: 48px;
-      margin-bottom: 32px;
-      display: block;
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-8px); }
-    }
-
-    /* Título */
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 8vw, 3.6rem);
-      font-weight: 300;
-      line-height: 1.15;
-      color: #2C2520;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-    h1 em {
-      font-style: italic;
-      color: #B0956E;
-    }
-
-    /* Subtítulo */
-    p.sub {
-      font-size: 15px;
-      font-weight: 300;
-      color: #8C7B6E;
-      line-height: 1.75;
-      margin-bottom: 52px;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 72px;
-      font-size: 11px;
-      color: #C0B4A8;
-      letter-spacing: 0.05em;
-    }
-
-  </style>
+  <!-- Estilos exclusivos de la pantalla de Login/Registro -->
+  <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
 
-<div class="container">
-
-  <div class="logo">TravelMate</div>
-
-  <span class="icon">🌍</span>
-
-  <h1>Algo <em>hermoso</em><br>está en camino.</h1>
-
-  <p class="sub">Estamos preparando tu nueva forma<br>de explorar el mundo.</p>
-
-
-  <footer>© 2026 TravelMate &nbsp;·&nbsp; Todos los derechos reservados</footer>
-
+<!-- ===== TOAST DE NOTIFICACIÓN FLOTANTE ===== -->
+<div class="toast" id="toastMsg">
+  <span id="toastTexto">Acción completada</span>
 </div>
 
-<script>
-  function handleSubmit() {
-    const input   = document.getElementById('emailInput');
-    const confirm = document.getElementById('confirm');
-    if (!input.value.includes('@')) {
-      input.style.borderColor = '#E07070';
-      setTimeout(() => input.style.borderColor = '#DDD4C8', 1500);
-      return;
-    }
-    input.disabled = true;
-    input.style.opacity = '0.5';
-    confirm.classList.add('show');
-  }
-</script>
+<!-- ===== LAYOUT PRINCIPAL: panel visual + panel formulario ===== -->
+<div class="auth-layout">
+
+  <!-- ===== PANEL IZQUIERDO: Galería visual de destinos ===== -->
+  <div class="panel-visual" id="panelVisual">
+    <!-- Los divs de fondo (panel-bg) se inyectan desde login.js -->
+
+    <!-- Capa de gradiente oscuro sobre la imagen -->
+    <div class="panel-overlay"></div>
+
+    <!-- Contenido textual sobre el fondo -->
+    <div class="panel-contenido">
+
+      <!-- Logo con enlace a la home -->
+      <a href="../index.html" class="panel-logo">Travel<span>Mate</span></a>
+
+      <!-- Sección de cita y puntos -->
+      <div class="panel-cita">
+        <span class="panel-destino-tag" id="destinoTag">Colombia · América</span>
+        <p class="panel-frase" id="destinoFrase">
+          "El mundo es un libro, y quienes no viajan solo leen una página."
+        </p>
+        <p class="panel-sub" id="destinoSub">
+          Únete a millones de viajeros que descubren el mundo con TravelMate.
+        </p>
+
+        <!-- Puntos indicadores del destino activo (se inyectan en login.js) -->
+        <div class="panel-puntos" id="panelPuntos"></div>
+      </div>
+
+      <!-- Estadísticas de confianza en la base del panel -->
+      <div class="panel-stats">
+        <div class="stat-item">
+          <div class="stat-numero">8.4M+</div>
+          <div class="stat-label">Viajeros activos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-numero">140+</div>
+          <div class="stat-label">Países cubiertos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-numero">4.9 ⭐</div>
+          <div class="stat-label">Calificación global</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- /panel-visual -->
+
+  <!-- ===== PANEL DERECHO: Formulario de autenticación ===== -->
+  <div class="panel-form">
+
+    <!-- Caja principal del formulario (se oculta al hacer login) -->
+    <div class="form-caja" id="formCaja">
+
+      <!-- Encabezado dinámico (cambia entre Login y Registro) -->
+      <div class="form-encabezado">
+        <div class="form-bienvenida" id="labelBienvenida">👋 Bienvenido de vuelta</div>
+        <h1 class="form-titulo" id="tituloForm">Inicia sesión</h1>
+        <p class="form-subtitulo" id="subForm">
+          Accede a tu cuenta para continuar explorando el mundo.
+        </p>
+      </div>
+
+      <!-- Toggle animado entre Login y Registro -->
+      <div class="form-toggle">
+        <button class="toggle-btn activo" id="btnLogin" onclick="cambiarModo('login')">
+          Iniciar sesión
+        </button>
+        <button class="toggle-btn" id="btnRegistro" onclick="cambiarModo('registro')">
+          Crear cuenta
+        </button>
+      </div>
+
+      <!-- Botones de login social -->
+      <div class="social-grid">
+        <button class="btn-social" onclick="loginSocial('Google')">
+          <span class="social-icon">🇬</span> Google
+        </button>
+        <button class="btn-social" onclick="loginSocial('Apple')">
+          <span class="social-icon">🍎</span> Apple
+        </button>
+      </div>
+
+      <!-- Divisor -->
+      <div class="divisor">O continúa con email</div>
+
+      <!-- ===== FORMULARIO DE INICIO DE SESIÓN ===== -->
+      <form id="formLogin" novalidate>
+
+        <!-- Campo Email -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="loginEmail">
+            Correo electrónico <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="email" id="loginEmail" class="campo-input"
+              placeholder="tucorreo@email.com"
+              autocomplete="email"
+              oninput="validarEmail('loginEmail', 'msgLoginEmail')">
+            <span class="campo-icono" id="iconoLoginEmail">✉️</span>
+          </div>
+          <div class="campo-msg" id="msgLoginEmail"></div>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="loginPass">
+            Contraseña <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="password" id="loginPass" class="campo-input"
+              placeholder="Tu contraseña"
+              autocomplete="current-password"
+              oninput="validarCampoVacio('loginPass', 'msgLoginPass', 'Ingresa tu contraseña')">
+            <span class="campo-icono" onclick="togglePass('loginPass', this)">👁️</span>
+          </div>
+          <div class="campo-msg" id="msgLoginPass"></div>
+        </div>
+
+        <!-- Recuérdame y enlace de contraseña olvidada -->
+        <div class="fila-extra">
+          <div class="check-grupo">
+            <input type="checkbox" id="recuerdame">
+            <label for="recuerdame">Recuérdame</label>
+          </div>
+          <a href="#" class="link-olvidaste" onclick="olvidoContrasena(); return false;">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Botón principal de login -->
+        <button type="button" class="btn-submit" onclick="ejecutarLogin()">
+          <span id="textoLoginBtn">Ingresar a TravelMate ✈️</span>
+          <div class="spinner" id="spinnerLogin"></div>
+        </button>
+
+      </form>
+      <!-- /formLogin -->
+
+      <!-- ===== FORMULARIO DE REGISTRO DE NUEVA CUENTA ===== -->
+      <form id="formRegistro" novalidate style="display:none;">
+
+        <!-- Campo Nombre Completo -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="regNombre">
+            Nombre completo <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="text" id="regNombre" class="campo-input"
+              placeholder="Tu nombre y apellido"
+              autocomplete="name"
+              oninput="validarNombre()">
+            <span class="icono-estado" id="iconoNombre"></span>
+          </div>
+          <div class="campo-msg" id="msgNombre"></div>
+        </div>
+
+        <!-- Campo Email de Registro -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="regEmail">
+            Correo electrónico <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="email" id="regEmail" class="campo-input"
+              placeholder="tucorreo@email.com"
+              autocomplete="email"
+              oninput="validarEmail('regEmail', 'msgRegEmail')">
+            <span class="icono-estado" id="iconoRegEmail"></span>
+          </div>
+          <div class="campo-msg" id="msgRegEmail"></div>
+        </div>
+
+        <!-- Selector de País -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="regPais">
+            País de residencia <span class="req">*</span>
+          </label>
+          <select id="regPais" class="campo-select">
+            <option value="">— Selecciona tu país —</option>
+            <option>🇨🇴 Colombia</option>
+            <option>🇲🇽 México</option>
+            <option>🇦🇷 Argentina</option>
+            <option>🇧🇷 Brasil</option>
+            <option>🇨🇱 Chile</option>
+            <option>🇵🇪 Perú</option>
+            <option>🇻🇪 Venezuela</option>
+            <option>🇪🇨 Ecuador</option>
+            <option>🇺🇸 Estados Unidos</option>
+            <option>🇪🇸 España</option>
+            <option>🇫🇷 Francia</option>
+            <option>🇮🇹 Italia</option>
+            <option>🇩🇪 Alemania</option>
+            <option>🇬🇧 Reino Unido</option>
+            <option>🇯🇵 Japón</option>
+            <option>🇰🇷 Corea del Sur</option>
+            <option>🇨🇳 China</option>
+            <option>🇮🇳 India</option>
+            <option>🇦🇺 Australia</option>
+            <option>🇨🇦 Canadá</option>
+            <option>🌍 Otro país</option>
+          </select>
+        </div>
+
+        <!-- Campo Nueva Contraseña -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="regPass">
+            Contraseña <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="password" id="regPass" class="campo-input"
+              placeholder="Mínimo 8 caracteres"
+              autocomplete="new-password"
+              oninput="validarFuerzaPass()">
+            <span class="campo-icono" onclick="togglePass('regPass', this)">👁️</span>
+          </div>
+          <!-- Indicador de fuerza de contraseña -->
+          <div class="fuerza-wrap" id="fuerzaWrap" style="display:none;">
+            <div class="fuerza-barras">
+              <div class="fuerza-barra" id="barra1"></div>
+              <div class="fuerza-barra" id="barra2"></div>
+              <div class="fuerza-barra" id="barra3"></div>
+              <div class="fuerza-barra" id="barra4"></div>
+            </div>
+            <span class="fuerza-texto" id="fuerzaTexto">Escribe una contraseña</span>
+          </div>
+          <div class="campo-msg" id="msgRegPass"></div>
+        </div>
+
+        <!-- Campo Confirmar Contraseña -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="regPassConf">
+            Confirmar contraseña <span class="req">*</span>
+          </label>
+          <div class="campo-wrap">
+            <input type="password" id="regPassConf" class="campo-input"
+              placeholder="Repite tu contraseña"
+              autocomplete="new-password"
+              oninput="validarConfPass()">
+            <span class="icono-estado" id="iconoConfPass"></span>
+          </div>
+          <div class="campo-msg" id="msgConfPass"></div>
+        </div>
+
+        <!-- Checkbox de Términos y Condiciones -->
+        <div class="campo-grupo" style="margin-bottom:20px;">
+          <div class="check-grupo">
+            <input type="checkbox" id="aceptaTerminos">
+            <label for="aceptaTerminos" style="font-size:13px; color:#6a5a3e;">
+              Acepto los
+              <a href="#" style="color:#e8792c;">Términos de Uso</a>
+              y la
+              <a href="#" style="color:#e8792c;">Política de Privacidad</a>
+            </label>
+          </div>
+        </div>
+
+        <!-- Botón principal de registro -->
+        <button type="button" class="btn-submit" onclick="ejecutarRegistro()">
+          <span id="textoRegBtn">Crear mi cuenta gratis 🚀</span>
+          <div class="spinner" id="spinnerReg"></div>
+        </button>
+
+        <p class="terminos">
+          Al registrarte, recibirás novedades de viajes y ofertas exclusivas.<br>
+          Puedes cancelar en cualquier momento.
+        </p>
+
+      </form>
+      <!-- /formRegistro -->
+
+      <!-- Pie del formulario con enlace al modo opuesto -->
+      <p class="form-pie" id="pieTxt">
+        ¿No tienes cuenta?
+        <a onclick="cambiarModo('registro')">Créala gratis →</a>
+      </p>
+
+    </div>
+    <!-- /form-caja -->
+
+    <!-- ===== PANEL DE BIENVENIDA POST-LOGIN ===== -->
+    <div class="bienvenida-panel" id="panelBienvenida">
+      <div class="bienvenida-avatar">🌍</div>
+      <div class="bienvenida-nombre" id="bienNombre">¡Hola, Viajero!</div>
+      <p class="bienvenida-sub">
+        Tu cuenta está activa. Estás listo para explorar el mundo con TravelMate.
+      </p>
+      <a href="../index.html" class="btn-ir-home">🌏 Explorar destinos →</a>
+      <button class="link-cerrar-sesion" onclick="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </div>
+
+  </div>
+  <!-- /panel-form -->
+
+</div>
+<!-- /auth-layout -->
+
+<!-- Lógica exclusiva de autenticación -->
+<script src="../js/login.js"></script>
 
 </body>
 </html>
