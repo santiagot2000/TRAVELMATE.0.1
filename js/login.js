@@ -340,9 +340,11 @@ function ejecutarLogin() {
       sessionStorage.setItem('tm_sesion', JSON.stringify(usuario));
     }
 
-    mostrarToast('✅ ¡Bienvenido de vuelta, ' + usuario.nombre.split(' ')[0] + '!', 'exito');
-    setTimeout(function() { mostrarBienvenida(usuario); }, 1200);
-  }, 1800);
+    mostrarToast('✅ Bienvenido de vuelta, ' + usuario.nombre.split(' ')[0], 'exito');
+    setTimeout(function() {
+      window.location.href = '../index.html';
+    }, 1000);
+  }, 1200);
 }
 
 /* ================================================================
@@ -391,6 +393,11 @@ function ejecutarRegistro() {
     setLoadingBtn('textoRegBtn', 'spinnerReg', false);
 
     /* Crear el objeto del nuevo usuario */
+    var partesNombre = nombre.split(' ');
+    var iniciales = partesNombre.length > 1
+      ? (partesNombre[0].charAt(0) + partesNombre[1].charAt(0)).toUpperCase()
+      : nombre.substring(0, 2).toUpperCase();
+
     var nuevoUsuario = {
       id:       Date.now(),           /* ID único basado en timestamp */
       nombre:   nombre,
@@ -398,7 +405,7 @@ function ejecutarRegistro() {
       pais:     pais,
       password: pass,
       fechaReg: new Date().toISOString(),
-      avatar:   obtenerEmoji(pais)   /* Emoji representativo del país */
+      avatar:   iniciales
     };
 
     /* Guardar en localStorage y activar sesión */
@@ -406,23 +413,17 @@ function ejecutarRegistro() {
     localStorage.setItem('tm_usuarios', JSON.stringify(usuarios));
     sessionStorage.setItem('tm_sesion', JSON.stringify(nuevoUsuario));
 
-    mostrarToast('🎉 ¡Cuenta creada exitosamente!', 'exito');
-    setTimeout(function() { mostrarBienvenida(nuevoUsuario); }, 1200);
-  }, 2000);
+    mostrarToast('✅ Cuenta creada exitosamente', 'exito');
+    setTimeout(function() {
+      window.location.href = '../index.html';
+    }, 1000);
+  }, 1400);
 }
 
-/* Devuelve un emoji representativo según el país del usuario */
-function obtenerEmoji(pais) {
-  var map = {
-    'Colombia': '🌴', 'México': '🌮', 'Argentina': '🥩', 'Brasil': '🌴',
-    'Chile': '🏔️', 'Perú': '🏔️', 'España': '💃', 'Francia': '🗼',
-    'Italia': '🍕', 'Japón': '🌸', 'Estados Unidos': '🗽', 'Australia': '🦘',
-    'Alemania': '🍺', 'India': '🎨', 'default': '🌍'
-  };
-  for (var key in map) {
-    if (pais.includes(key)) return map[key];
-  }
-  return map['default'];
+/* Devuelve la inicial en mayúscula para un avatar limpio y profesional */
+function obtenerInicial(nombre) {
+  if (!nombre) return 'U';
+  return nombre.trim().charAt(0).toUpperCase();
 }
 
 /* Controla el estado visual del botón (spinner visible o texto visible) */
@@ -433,13 +434,19 @@ function setLoadingBtn(textoId, spinnerId, cargando) {
 
 /* ================================================================
    PANEL DE BIENVENIDA POST-LOGIN
-   Oculta el formulario y muestra un saludo personalizado.
    ================================================================ */
 function mostrarBienvenida(usuario) {
   document.getElementById('formCaja').style.display        = 'none';
   document.getElementById('panelBienvenida').style.display = 'flex';
   document.getElementById('bienNombre').textContent =
-    '¡Hola, ' + usuario.nombre.split(' ')[0] + '! ' + (usuario.avatar || '🌍');
+    'Bienvenido, ' + usuario.nombre.split(' ')[0];
+
+  var esAdmin = usuario.rol === 'Super Admin' || usuario.rol === 'Administrador';
+  var btnHome = document.querySelector('.btn-ir-home');
+  if (btnHome && esAdmin) {
+    btnHome.textContent = 'Acceder al Panel de Control →';
+    btnHome.href = 'panelAdmin.html';
+  }
 }
 
 /* ================================================================

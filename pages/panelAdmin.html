@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelMate — Panel de Control y Administración</title>
+
+  <!-- Estilos propios y exclusivos del panel administrativo alineados a TravelMate -->
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+
+  <div class="admin-layout">
+
+    <!-- ===== SIDEBAR LATERAL ===== -->
+    <aside class="admin-sidebar">
+      <div>
+        <!-- Marca / Logo -->
+        <a href="../index.html" class="admin-brand">
+          <div class="admin-brand-icon" style="font-size:16px; font-weight:800; font-family:Georgia,serif;">TM</div>
+          <div class="admin-brand-info">
+            <h1>Travel<span>Mate</span></h1>
+            <p>Admin</p>
+          </div>
+        </a>
+
+        <!-- Menú de Navegación por Módulos -->
+        <nav class="admin-menu">
+          <a class="admin-menu-item active" onclick="cambiarSeccion('secUsuarios', this)">
+            <span class="admin-menu-icon">👥</span>
+            <span>Gestión de Usuarios</span>
+          </a>
+          <a class="admin-menu-item" onclick="cambiarSeccion('secPaquetes', this)">
+            <span class="admin-menu-icon">📦</span>
+            <span>Paquetes Turísticos</span>
+          </a>
+          <a class="admin-menu-item" onclick="cambiarSeccion('secDestinos', this)">
+            <span class="admin-menu-icon">🌐</span>
+            <span>Destinos (28 Globales)</span>
+          </a>
+          <a class="admin-menu-item" href="../index.html">
+            <span class="admin-menu-icon">🏠</span>
+            <span>Ver Portal Principal</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Footer del Sidebar con Sesión Activa -->
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-pill">
+          <span class="admin-user-avatar" id="adminSesionAvatar" style="width:32px; height:32px; border-radius:50%; background:#f6a800; color:#1a1205; display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:bold;">SA</span>
+          <div class="admin-user-detalles">
+            <strong id="adminSesionNombre">Super Administrador</strong>
+            <small id="adminSesionRol">Super Admin</small>
+          </div>
+        </div>
+        <button class="btn-salir" onclick="cerrarSesionAdmin()">
+          <span>🚪</span>
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ===== ÁREA PRINCIPAL ===== -->
+    <main class="admin-content">
+
+      <!-- Topbar Superior -->
+      <header class="admin-topbar">
+        <div class="admin-topbar-titulo">
+          <h2>Panel de Administración Global</h2>
+          <p>Supervisa usuarios, permisos de trabajadores, paquetes turísticos y métricas del sistema.</p>
+        </div>
+        <div class="admin-topbar-acciones">
+          <button class="btn-principal" onclick="abrirModalNuevoUsuario()">
+            <span>➕</span>
+            <span>Nuevo Usuario / Empleado</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Tarjetas de Métricas Dinámicas (KPIs) -->
+      <section class="admin-stats">
+        <article class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Usuarios</span>
+            <div class="stat-icon">👥</div>
+          </div>
+          <strong class="stat-number" id="kpiTotalUsuarios">0</strong>
+          <span class="stat-sub">Registrados en la plataforma</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Trabajadores</span>
+            <div class="stat-icon">🧑‍💻</div>
+          </div>
+          <strong class="stat-number" id="kpiTrabajadores">0</strong>
+          <span class="stat-sub">Personal con acceso operativo</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Administradores</span>
+            <div class="stat-icon">🛡️</div>
+          </div>
+          <strong class="stat-number" id="kpiAdmins">0</strong>
+          <span class="stat-sub">Control total del sistema</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Paquetes Activos</span>
+            <div class="stat-icon">🏝️</div>
+          </div>
+          <strong class="stat-number" id="kpiTotalPaquetes">0</strong>
+          <span class="stat-sub">Ofertas turísticas en catálogo</span>
+        </article>
+      </section>
+
+      <!-- ===== SECCIÓN 1: GESTIÓN DE USUARIOS ===== -->
+      <section class="admin-section active" id="secUsuarios">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3>Control y Jerarquía de Usuarios</h3>
+              <p>Crea, actualiza roles y gestiona accesos para Clientes, Trabajadores y Administradores.</p>
+            </div>
+            <div class="admin-filtro-bar">
+              <input type="text" id="buscarUsuarioInput" class="admin-search-input" placeholder="🔍 Buscar por nombre o correo..." />
+              <select id="filtroRolUsuario" class="admin-select">
+                <option value="">Todos los Roles</option>
+                <option value="Super Admin">Super Admin</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Trabajador">Trabajador</option>
+                <option value="Cliente">Cliente</option>
+              </select>
+              <select id="filtroEstadoUsuario" class="admin-select">
+                <option value="">Todos los Estados</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+                <option value="Bloqueado">Bloqueado</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tabla de Usuarios -->
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre y Contacto</th>
+                  <th>Correo Electrónico</th>
+                  <th>Rol / Jerarquía</th>
+                  <th>Estado</th>
+                  <th>País</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="lista_usuarios">
+                <!-- Se llena dinámicamente con panel.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECCIÓN 2: PAQUETES TURÍSTICOS ===== -->
+      <section class="admin-section" id="secPaquetes">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3>Catálogo de Paquetes Turísticos</h3>
+              <p>Configuración de fechas, tarifas estimadas en COP, descripción y hoteles aliados.</p>
+            </div>
+            <div class="admin-filtro-bar">
+              <input type="text" id="buscarPaqueteInput" class="admin-search-input" placeholder="🔍 Buscar paquete..." />
+              <button class="btn-principal" onclick="abrirModalNuevoPaquete()">
+                <span>➕</span>
+                <span>Crear Paquete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabla de Paquetes -->
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Paquete y Descripción</th>
+                  <th>Precio Estimado</th>
+                  <th>Temporada / Fechas</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="lista_paquetes">
+                <!-- Se llena dinámicamente con panel.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECCIÓN 3: DESTINOS GLOBALES ===== -->
+      <section class="admin-section" id="secDestinos">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3>Destinos Mundiales Conectados (28 Destinos)</h3>
+              <p>Mapeados en los 5 continentes sincronizados con el catálogo general de TravelMate.</p>
+            </div>
+            <a href="catalogos.html" class="btn-secundario">Ir al Catálogo Público 🌐</a>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+            <div style="background:#fffcf5; border:1px solid #ecdcc0; padding:18px; border-radius:14px;">
+              <span style="font-size:24px;">🌎</span>
+              <h4 style="margin:8px 0 4px; font-family:Georgia,serif;">América</h4>
+              <p style="font-size:13px; color:#6a5a3e;">Cartagena, Machu Picchu, Cancún, Río de Janeiro, San Andrés, Nueva York, etc.</p>
+            </div>
+            <div style="background:#fffcf5; border:1px solid #ecdcc0; padding:18px; border-radius:14px;">
+              <span style="font-size:24px;">🏰</span>
+              <h4 style="margin:8px 0 4px; font-family:Georgia,serif;">Europa</h4>
+              <p style="font-size:13px; color:#6a5a3e;">París, Madrid, Roma, Barcelona, Londres, Ámsterdam, Berlín.</p>
+            </div>
+            <div style="background:#fffcf5; border:1px solid #ecdcc0; padding:18px; border-radius:14px;">
+              <span style="font-size:24px;">⛩️</span>
+              <h4 style="margin:8px 0 4px; font-family:Georgia,serif;">Asia & Oceanía</h4>
+              <p style="font-size:13px; color:#6a5a3e;">Tokio & Kioto, Bali, Dubái, Sídney & Gran Barrera.</p>
+            </div>
+            <div style="background:#fffcf5; border:1px solid #ecdcc0; padding:18px; border-radius:14px;">
+              <span style="font-size:24px;">🦁</span>
+              <h4 style="margin:8px 0 4px; font-family:Georgia,serif;">África</h4>
+              <p style="font-size:13px; color:#6a5a3e;">El Cairo & Pirámides, Marrakech, Ciudad del Cabo & Safari.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===== MODAL FLOTANTE: USUARIO (CREAR / EDITAR) ===== -->
+  <div class="admin-modal-overlay" id="modalUsuarioOverlay">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalUsuarioTitulo">Gestión de Usuario</h3>
+        <button class="btn-cerrar-modal" onclick="cerrarModalUsuario()">✕</button>
+      </div>
+
+      <form id="formUsuarioAdmin" onsubmit="guardarUsuarioAdmin(event)">
+        <input type="hidden" id="u_id_edit" />
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Nombre Completo *</label>
+            <input type="text" id="u_nombre" placeholder="Ej: Santiago Pérez" required />
+          </div>
+          <div class="admin-field">
+            <label>Correo Electrónico *</label>
+            <input type="email" id="u_email" placeholder="correo@travelmate.com" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Teléfono de Contacto</label>
+            <input type="text" id="u_telefono" placeholder="+57 300 1234567" />
+          </div>
+          <div class="admin-field">
+            <label>País</label>
+            <select id="u_pais">
+              <option value="Colombia">🇨🇴 Colombia</option>
+              <option value="México">🇲🇽 México</option>
+              <option value="Argentina">🇦🇷 Argentina</option>
+              <option value="España">🇪🇸 España</option>
+              <option value="Estados Unidos">🇺🇸 Estados Unidos</option>
+              <option value="Otro">🌍 Otro país</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Rol / Nivel de Acceso *</label>
+            <select id="u_rol">
+              <option value="Cliente">Cliente (Usuario normal)</option>
+              <option value="Trabajador">Trabajador / Empleado (Gestión turística)</option>
+              <option value="Administrador">Administrador (Control de área)</option>
+              <option value="Super Admin">Super Admin (Control Maestro)</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>Estado de Cuenta</label>
+            <select id="u_estado">
+              <option value="Activo">Activo (Habilitado)</option>
+              <option value="Inactivo">Inactivo (En pausa)</option>
+              <option value="Bloqueado">Bloqueado (Acceso revocado)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label>Contraseña Provisional</label>
+          <input type="password" id="u_pass" placeholder="Dejar en blanco para conservar contraseña actual" />
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-secundario" onclick="cerrarModalUsuario()">Cancelar</button>
+          <button type="submit" class="btn-principal">Guardar Usuario 💾</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== MODAL FLOTANTE: PAQUETE (CREAR / EDITAR) ===== -->
+  <div class="admin-modal-overlay" id="modalPaqueteOverlay">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalPaqueteTitulo">Gestión de Paquete Turístico</h3>
+        <button class="btn-cerrar-modal" onclick="cerrarModalPaquete()">✕</button>
+      </div>
+
+      <form id="formPaqueteAdmin" onsubmit="guardarPaqueteAdmin(event)">
+        <input type="hidden" id="p_id_edit" />
+
+        <div class="admin-field">
+          <label>Nombre del Paquete *</label>
+          <input type="text" id="p_nombre" placeholder="Ej: Machu Picchu Imperial" required />
+        </div>
+
+        <div class="admin-field">
+          <label>Descripción / Itinerario Resumido</label>
+          <textarea id="p_descripcion" rows="3" placeholder="Detalles de la experiencia turística..."></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Precio Estimado (COP) *</label>
+            <input type="number" id="p_precio" placeholder="2500000" required />
+          </div>
+          <div class="admin-field">
+            <label>Hoteles Ofertados</label>
+            <input type="text" id="p_hoteles" placeholder="Ej: Hilton / Marriott" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Fecha Estimada de Salida</label>
+            <input type="date" id="p_salida" />
+          </div>
+          <div class="admin-field">
+            <label>Fecha Estimada de Llegada</label>
+            <input type="date" id="p_llegada" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label>Estado del Paquete</label>
+          <select id="p_estado">
+            <option value="Activo">Activo (Visible)</option>
+            <option value="Inactivo">Inactivo (Oculto)</option>
+          </select>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-secundario" onclick="cerrarModalPaquete()">Cancelar</button>
+          <button type="submit" class="btn-principal">Guardar Paquete ✈️</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lógica dinámica del panel de administración -->
+  <script src="../js/panel.js"></script>
+</body>
+</html>

@@ -125,19 +125,25 @@ TRAVELMATE.0.1/
 ├── README.md                # Documentación Técnica y Funcional Oficial
 ├── css/
 │   ├── style.css            # Estilos globales, carrusel 3D, modo oscuro y botón volver arriba
+│   ├── login.css            # Estilos exclusivos de la pantalla dividida de Login / Registro
+│   ├── admin.css            # Estilos dedicados del Panel de Administración TravelMate
 │   └── style.backup.css     # Copia de seguridad de estilos
 ├── js/
-│   ├── global.js            # Lógica global: Modo oscuro (localStorage) y botón flotante Volver Arriba
+│   ├── global.js            # Lógica global: Modo oscuro (localStorage), botón volver arriba y estado de sesión
 │   ├── script.js            # Lógica de la home, carrusel 3D, modal y scroll
 │   ├── cuestionario.js      # Lógica del wizard de afinidades y matching
 │   ├── catalogo.js          # Lógica de búsqueda, filtros y ordenamiento del catálogo
-│   └── detalle.js           # Lógica dinámica de detalles, gastronomía, eventos en tiempo real y 4 estaciones
+│   ├── detalle.js           # Lógica dinámica de detalles, gastronomía, eventos en tiempo real y 4 estaciones
+│   ├── login.js             # Lógica de login/registro, validaciones, seguridad y persistencia localStorage
+│   └── panel.js             # Control maestro del Panel Admin: CRUD usuarios/paquetes, roles y métricas
 ├── assets/
 │   └── img/                 # 28 Imágenes locales en alta definición para todos los destinos
 └── pages/
     ├── cuestionario.html    # Motor de preguntas para descubrir el viaje
     ├── catalogos.html       # Catálogo global de destinos (28 destinos)
     ├── detalle.html         # Vista detallada del destino seleccionado
+    ├── login.html           # Vista de autenticación mundial (login / registro)
+    ├── panelAdmin.html      # Panel de control de Super Admin, Administradores y Trabajadores
     └── ...                  # Módulos secundarios
 ```
 
@@ -159,3 +165,7 @@ TRAVELMATE.0.1/
 | **v1.0** | Sep 2026 | Implementación de la Vista de Detalle (`detalle.html`), Sección 7 (Gastronomía) y Sección 8 (Festividades). |
 | **v1.1** | Sep 2026 | Detección del mes actual (`new Date()`), 28 imágenes únicas por destino y **Sección 9: Las 4 Estaciones del Año**. |
 | **v1.2** | Sep 2026 | Módulo global `js/global.js`: **Modo Oscuro (Dark Mode)** con persistencia en `localStorage` y **Botón Flotante Flecha "Volver Arriba"** (`window.scrollTo({ top: 0, behavior: 'smooth' })`). |
+| **v1.3** | Oct 2026 | **Módulo de Autenticación de Nivel Mundial**: Separación limpia en `pages/login.html`, `css/login.css` y `js/login.js`. Integración del estado de sesión en la barra de navegación global (`js/global.js`), mostrando píldora de usuario con avatar y menú desplegable para cerrar sesión. |
+| **v1.4** | Oct 2026 | **Suite de Administración y Control Maestro**: Implementación completa de `pages/panelAdmin.html`, `css/admin.css` y `js/panel.js`. Control jerárquico de roles (*Super Admin, Administrador, Trabajador, Cliente*), métricas dinámicas (KPIs), CRUD de usuarios y paquetes turísticos, filtros en tiempo real y enlace directo desde el menú de navegación. |
+
+
