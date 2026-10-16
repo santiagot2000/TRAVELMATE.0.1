@@ -330,6 +330,303 @@ function cargarPantallaDetalle(d) {
       contEstaciones.appendChild(card);
     });
   }
+
+  // Configurar Interacciones de Favoritos y Reservas
+  configurarBotonFavorito(d);
+  configurarModalReserva(d);
+}
+
+/* --- GESTIÓN DEL BOTÓN DE FAVORITOS EN HERO --- */
+function configurarBotonFavorito(d) {
+  var btnFav = document.getElementById('btnFavoritoHero');
+  if (!btnFav) return;
+
+  function actualizarEstadoVisual() {
+    var yaEsFav = typeof esFavorito === 'function' && esFavorito(d.nombre);
+    var corazon = btnFav.querySelector('.corazon-icono');
+    var texto = btnFav.querySelector('.texto-fav');
+
+    if (yaEsFav) {
+      btnFav.classList.add('activo');
+      if (corazon) corazon.textContent = '❤️';
+      if (texto) texto.textContent = 'Guardado en Favoritos';
+    } else {
+      btnFav.classList.remove('activo');
+      if (corazon) corazon.textContent = '♡';
+      if (texto) texto.textContent = 'Guardar en Favoritos';
+    }
+  }
+
+  actualizarEstadoVisual();
+
+  btnFav.addEventListener('click', function() {
+    if (typeof toggleFavorito === 'function') {
+      var destinoObj = {
+        id: d.nombre.toLowerCase().replace(/[^a-z0-9]/g, ''),
+        nombre: d.nombre,
+        pais: d.pais,
+        img: d.img,
+        precio: d.precioTotal,
+        tag: d.tag,
+        duracion: d.duracion,
+        compatibilidad: d.compatibilidad,
+        descripcion: d.descripcion
+      };
+
+      var agregado = toggleFavorito(destinoObj);
+      actualizarEstadoVisual();
+
+      if (typeof mostrarToastGlobal === 'function') {
+        if (agregado) {
+          mostrarToastGlobal('❤️ ' + d.nombre + ' añadido a tus favoritos', 'exito');
+        } else {
+          mostrarToastGlobal('Destino eliminado de tus favoritos', 'info');
+        }
+      }
+    }
+  });
+}
+
+/* --- GESTIÓN DEL MODAL Y FLUJO DE RESERVA --- */
+function configurarModalReserva(d) {
+  var modal = document.getElementById('modalReserva');
+  var btnAbrir = document.getElementById('btnAbrirModalReserva');
+  var btnCerrar = document.getElementById('btnCerrarModalReserva');
+  var btnCancelar = document.getElementById('btnCancelarReservaModal');
+  var form = document.getElementById('formReservaViaje');
+  var spanDestino = document.getElementById('resModalDestino');
+
+  if (!modal || !btnAbrir || !form) return;
+
+  if (spanDestino) spanDestino.textContent = d.nombre;
+
+  // Campos del formulario
+  var inputSalida = document.getElementById('resFechaSalida');
+  var inputRegreso = document.getElementById('resFechaRegreso');
+  var selectViajeros = document.getElementById('resViajeros');
+  var selectAlojamiento = document.getElementById('resAlojamiento');
+  var inputNombre = document.getElementById('resTitularNombre');
+  var inputEmail = document.getElementById('resTitularEmail');
+  var inputTel = document.getElementById('resTitularTel');
+
+  // Elementos del desglose
+  var txtBase = document.getElementById('resDesgloseBase');
+  var txtViajeros = document.getElementById('resDesgloseViajeros');
+  var txtCat = document.getElementById('resDesgloseCat');
+  var txtTotal = document.getElementById('resDesgloseTotal');
+
+  // Establecer fechas mínimas (hoy y hoy + 5 días)
+  var hoy = new Date();
+  var fechaHoyStr = hoy.toISOString().split('T')[0];
+  if (inputSalida) inputSalida.min = fechaHoyStr;
+
+  var fechaSalidaDefault = new Date();
+  fechaSalidaDefault.setDate(hoy.getDate() + 15);
+  var fechaRegresoDefault = new Date();
+  fechaRegresoDefault.setDate(hoy.getDate() + 20);
+
+  if (inputSalida && !inputSalida.value) {
+    inputSalida.value = fechaSalidaDefault.toISOString().split('T')[0];
+  }
+  if (inputRegreso && !inputRegreso.value) {
+    inputRegreso.value = fechaRegresoDefault.toISOString().split('T')[0];
+  }
+
+  // Prellenar con datos de la sesión activa si existe
+  try {
+    var sesionStr = localStorage.getItem('tm_sesion') || sessionStorage.getItem('tm_sesion');
+    if (sesionStr) {
+      var usuario = JSON.parse(sesionStr);
+      if (inputNombre && !inputNombre.value) inputNombre.value = usuario.nombre || '';
+      if (inputEmail && !inputEmail.value) inputEmail.value = usuario.email || '';
+      if (inputTel && !inputTel.value) inputTel.value = usuario.telefono || '+57 300 123 4567';
+    }
+  } catch (e) {
+    console.warn('Error leyendo sesión para reserva:', e);
+  }
+
+  // Cálculo de precio en tiempo real
+  function recalcularPrecioReserva() {
+    var numViajeros = parseInt(selectViajeros ? selectViajeros.value : '2', 10) || 2;
+    var cat = selectAlojamiento ? selectAlojamiento.value : 'Confort Superior';
+
+    var multCat = 1.0;
+    var labelCat = 'Incluido';
+    if (cat === 'Estándar') {
+      multCat = 0.85;
+      labelCat = '-15% (Económico)';
+    } else if (cat === 'Lujo & Exclusivo') {
+      multCat = 1.40;
+      labelCat = '+40% (Lujo 5★)';
+    }
+
+    var precioBasePersona = d.precioTotal || 2450000;
+    var total = Math.round(precioBasePersona * multCat * numViajeros);
+
+    if (txtBase) txtBase.textContent = '$' + precioBasePersona.toLocaleString('es-CO') + ' COP';
+    if (txtViajeros) txtViajeros.textContent = 'x ' + numViajeros + (numViajeros === 1 ? ' persona' : ' personas');
+    if (txtCat) txtCat.textContent = labelCat;
+    if (txtTotal) txtTotal.textContent = '$' + total.toLocaleString('es-CO') + ' COP';
+
+    return total;
+  }
+
+  recalcularPrecioReserva();
+
+  if (selectViajeros) selectViajeros.addEventListener('change', recalcularPrecioReserva);
+  if (selectAlojamiento) selectAlojamiento.addEventListener('change', recalcularPrecioReserva);
+
+  // Abrir modal
+  btnAbrir.addEventListener('click', function() {
+    recalcularPrecioReserva();
+    modal.classList.add('abierto');
+  });
+
+  // Cerrar modal
+  function cerrarModal() {
+    modal.classList.remove('abierto');
+  }
+
+  if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+  if (btnCancelar) btnCancelar.addEventListener('click', cerrarModal);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) cerrarModal();
+  });
+
+  // Enviar formulario de reserva
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var fechaSalida = inputSalida.value;
+    var fechaRegreso = inputRegreso.value;
+
+    if (new Date(fechaRegreso) <= new Date(fechaSalida)) {
+      if (typeof mostrarToastGlobal === 'function') {
+        mostrarToastGlobal('⚠️ La fecha de regreso debe ser posterior a la de salida', 'error');
+      } else {
+        alert('La fecha de regreso debe ser posterior a la de salida');
+      }
+      return;
+    }
+
+    var totalFinal = recalcularPrecioReserva();
+    var numViajeros = parseInt(selectViajeros.value, 10);
+    var cat = selectAlojamiento.value;
+
+    var diffMs = new Date(fechaRegreso) - new Date(fechaSalida);
+    var dias = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+
+    var sesionActual = null;
+    try {
+      var sStr = localStorage.getItem('tm_sesion') || sessionStorage.getItem('tm_sesion');
+      if (sStr) sesionActual = JSON.parse(sStr);
+    } catch (err) {}
+
+    var emailUsuario = sesionActual ? sesionActual.email : inputEmail.value.trim();
+
+    var datosReserva = {
+      usuarioEmail: emailUsuario,
+      destinoId: d.nombre.toLowerCase().replace(/[^a-z0-9]/g, ''),
+      destinoNombre: d.nombre,
+      destinoPais: d.pais,
+      destinoImg: d.img,
+      fechaSalida: fechaSalida,
+      fechaRegreso: fechaRegreso,
+      dias: dias,
+      viajeros: numViajeros,
+      alojamiento: cat,
+      precioTotal: totalFinal,
+      titular: {
+        nombre: inputNombre.value.trim(),
+        email: inputEmail.value.trim(),
+        telefono: inputTel.value.trim()
+      }
+    };
+
+    var nueva = null;
+    if (typeof crearNuevaReserva === 'function') {
+      nueva = crearNuevaReserva(datosReserva);
+    }
+
+    cerrarModal();
+
+    var codigoRes = nueva ? nueva.id : 'TM-' + Math.floor(10000 + Math.random() * 90000);
+    if (typeof mostrarToastGlobal === 'function') {
+      mostrarToastGlobal('🎉 ¡Reserva confirmada con éxito! Código: ' + codigoRes, 'exito');
+    }
+
+    // Mostrar el modal bonito de confirmación exitosa
+    setTimeout(function() {
+      mostrarModalExitoReserva({
+        codigo: codigoRes,
+        destino: d.nombre,
+        fechaSalida: fechaSalida,
+        fechaRegreso: fechaRegreso,
+        viajeros: numViajeros,
+        precio: totalFinal,
+        categoria: cat
+      });
+    }, 300);
+  });
+}
+
+/* --- MODAL DE CONFIRMACIÓN EXITOSA (Reemplaza el confirm() feo) --- */
+function mostrarModalExitoReserva(datos) {
+  var modal = document.getElementById('modalExitoReserva');
+  if (!modal) return;
+
+  // Poblar los datos dinámicos
+  var elCodigo = document.getElementById('exitoCodigoValor');
+  var elDestino = document.getElementById('exitoDestinoNombre');
+  var elFechas = document.getElementById('exitoFechas');
+  var elViajeros = document.getElementById('exitoViajeros');
+  var elPrecio = document.getElementById('exitoPrecio');
+  var elCategoria = document.getElementById('exitoCategoria');
+
+  if (elCodigo) elCodigo.textContent = datos.codigo || 'TM-00000';
+  if (elDestino) elDestino.textContent = datos.destino || 'Destino Increíble';
+
+  // Formatear fechas bonitas
+  function formatearFecha(fechaStr) {
+    if (!fechaStr) return '--';
+    var partes = fechaStr.split('-');
+    if (partes.length === 3) return partes[2] + '/' + partes[1] + '/' + partes[0];
+    return fechaStr;
+  }
+  if (elFechas) {
+    elFechas.textContent = formatearFecha(datos.fechaSalida) + '  →  ' + formatearFecha(datos.fechaRegreso);
+  }
+
+  if (elViajeros) {
+    var numV = datos.viajeros || 1;
+    elViajeros.textContent = numV + (numV === 1 ? ' Viajero Solo' : ' Viajeros');
+  }
+
+  if (elPrecio) {
+    elPrecio.textContent = '$' + (datos.precio || 0).toLocaleString('es-CO') + ' COP';
+  }
+
+  if (elCategoria) elCategoria.textContent = datos.categoria || 'Confort Superior';
+
+  // Abrir modal con animación
+  modal.classList.add('abierto');
+
+  // Botón "Seguir Explorando" cierra el modal
+  var btnSeguir = document.getElementById('exitoBtnSeguir');
+  if (btnSeguir) {
+    btnSeguir.onclick = function() {
+      modal.classList.remove('abierto');
+    };
+  }
+
+  // Cerrar al hacer clic fuera
+  modal.addEventListener('click', function handler(e) {
+    if (e.target === modal) {
+      modal.classList.remove('abierto');
+      modal.removeEventListener('click', handler);
+    }
+  });
 }
 
 /* --- INICIALIZACIÓN --- */

@@ -452,6 +452,9 @@ function renderizarDestinos(destinos) {
 
   destinos.forEach(function(d) {
     var precioCOP = '$' + d.precio.toLocaleString('es-CO') + ' COP';
+    var esFav = (typeof esFavorito === 'function') && (esFavorito(d.id) || esFavorito(d.nombre));
+    var favClase = esFav ? ' activo' : '';
+    var favTitulo = esFav ? 'Quitar de favoritos' : 'Guardar en favoritos';
 
     var card = document.createElement('a');
     card.href = 'detalle.html?destino=' + encodeURIComponent(d.nombre);
@@ -460,6 +463,11 @@ function renderizarDestinos(destinos) {
     card.innerHTML =
       '<div class="dest-card-img">' +
         '<img src="' + d.img + '" alt="' + d.nombre + ', ' + d.pais + '" loading="lazy">' +
+        '<button type="button" class="dest-card-fav-btn' + favClase + '" data-id="' + d.id + '" title="' + favTitulo + '" aria-label="Favorito">' +
+          '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">' +
+            '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>' +
+          '</svg>' +
+        '</button>' +
         '<span class="dest-compat-badge">★ ' + d.compatibilidad + '% compat.</span>' +
         '<span class="dest-duracion-badge">⏱️ ' + d.duracion + '</span>' +
       '</div>' +
@@ -476,6 +484,30 @@ function renderizarDestinos(destinos) {
           '<span class="dest-card-link">Explorar →</span>' +
         '</div>' +
       '</div>';
+
+    var btnFav = card.querySelector('.dest-card-fav-btn');
+    if (btnFav) {
+      btnFav.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof toggleFavorito === 'function') {
+          var agregado = toggleFavorito(d);
+          if (agregado) {
+            btnFav.classList.add('activo');
+            btnFav.title = 'Quitar de favoritos';
+            if (typeof mostrarToastGlobal === 'function') {
+              mostrarToastGlobal('❤️ ' + d.nombre + ' añadido a tus favoritos', 'exito');
+            }
+          } else {
+            btnFav.classList.remove('activo');
+            btnFav.title = 'Guardar en favoritos';
+            if (typeof mostrarToastGlobal === 'function') {
+              mostrarToastGlobal('Destino eliminado de tus favoritos', 'info');
+            }
+          }
+        }
+      });
+    }
 
     grid.appendChild(card);
   });

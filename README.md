@@ -124,24 +124,30 @@ TRAVELMATE.0.1/
 ├── index.html               # Landing Page (Hero 3D, 6 Secciones y Modal)
 ├── README.md                # Documentación Técnica y Funcional Oficial
 ├── css/
-│   ├── style.css            # Estilos globales, carrusel 3D, modo oscuro y botón volver arriba
+│   ├── style.css            # Estilos globales, carrusel 3D, modo oscuro, responsive, toasts y modales
 │   ├── login.css            # Estilos exclusivos de la pantalla dividida de Login / Registro
 │   ├── admin.css            # Estilos dedicados del Panel de Administración TravelMate
 │   └── style.backup.css     # Copia de seguridad de estilos
 ├── js/
-│   ├── global.js            # Lógica global: Modo oscuro (localStorage), botón volver arriba y estado de sesión
+│   ├── global.js            # Lógica global: Modo oscuro, botón arriba, sesión, favoritos y reservas
 │   ├── script.js            # Lógica de la home, carrusel 3D, modal y scroll
 │   ├── cuestionario.js      # Lógica del wizard de afinidades y matching
-│   ├── catalogo.js          # Lógica de búsqueda, filtros y ordenamiento del catálogo
-│   ├── detalle.js           # Lógica dinámica de detalles, gastronomía, eventos en tiempo real y 4 estaciones
-│   ├── login.js             # Lógica de login/registro, validaciones, seguridad y persistencia localStorage
-│   └── panel.js             # Control maestro del Panel Admin: CRUD usuarios/paquetes, roles y métricas
+│   ├── catalogo.js          # Catálogo con búsqueda, filtros, ordenamiento y botón de favoritos
+│   ├── detalle.js           # Detalle dinámico, botón de favorito y modal interactivo de reservas
+│   ├── favoritos.js         # Colección de favoritos, tarjetas dinámicas y gestión localStorage
+│   ├── cuenta.js            # Gestión de perfil, edición de datos y actualización de contraseñas
+│   ├── viajes.js            # Gestión de reservas, filtros por estado y cancelación interactiva
+│   ├── login.js             # Lógica de login/registro, validaciones, seguridad y persistencia
+│   └── panel.js             # Control maestro del Panel Admin: CRUD usuarios/paquetes y métricas
 ├── assets/
 │   └── img/                 # 28 Imágenes locales en alta definición para todos los destinos
 └── pages/
     ├── cuestionario.html    # Motor de preguntas para descubrir el viaje
-    ├── catalogos.html       # Catálogo global de destinos (28 destinos)
-    ├── detalle.html         # Vista detallada del destino seleccionado
+    ├── catalogos.html       # Catálogo global de destinos (28 destinos) con favoritos
+    ├── detalle.html         # Vista detallada con modal interactivo de reserva
+    ├── favoritos.html       # Colección de destinos guardados por el usuario
+    ├── cuenta.html          # Centro de control del perfil y seguridad del usuario
+    ├── viajes.html          # Historial y gestión de viajes reservados
     ├── login.html           # Vista de autenticación mundial (login / registro)
     ├── panelAdmin.html      # Panel de control de Super Admin, Administradores y Trabajadores
     └── ...                  # Módulos secundarios
@@ -167,5 +173,5 @@ TRAVELMATE.0.1/
 | **v1.2** | Sep 2026 | Módulo global `js/global.js`: **Modo Oscuro (Dark Mode)** con persistencia en `localStorage` y **Botón Flotante Flecha "Volver Arriba"** (`window.scrollTo({ top: 0, behavior: 'smooth' })`). |
 | **v1.3** | Oct 2026 | **Módulo de Autenticación de Nivel Mundial**: Separación limpia en `pages/login.html`, `css/login.css` y `js/login.js`. Integración del estado de sesión en la barra de navegación global (`js/global.js`), mostrando píldora de usuario con avatar y menú desplegable para cerrar sesión. |
 | **v1.4** | Oct 2026 | **Suite de Administración y Control Maestro**: Implementación completa de `pages/panelAdmin.html`, `css/admin.css` y `js/panel.js`. Control jerárquico de roles (*Super Admin, Administrador, Trabajador, Cliente*), métricas dinámicas (KPIs), CRUD de usuarios y paquetes turísticos, filtros en tiempo real y enlace directo desde el menú de navegación. |
-
-
+| **v1.5** | Oct 2026 | **Optimización Responsive Móvil & Redirección Profesional**: Menú hamburguesa deslizable con soporte touch para submenús, píldora sobria con iniciales corporativas (eliminación de íconos infantiles), soporte de clic para mantener abierto el menú de sesión y redirección fluida a la página de inicio post-login. |
+| **v1.6** | Oct 2026 | **Experiencia Integral de Viajero (Favoritos, Perfil y Reservas)**:<br>1. **Sistema de Favoritos (`pages/favoritos.html` & `js/favoritos.js`)**: Botones de corazón reactivos en catálogo y detalle, persistencia `tm_favoritos`, tarjetas dinámicas y estado vacío con enlace al catálogo.<br>2. **Centro de Control / Mi Perfil (`pages/cuenta.html` & `js/cuenta.js`)**: Edición de datos personales (nombre, teléfono, ciudad, estilo de viaje), actualización de contraseña con validación de seguridad y métricas en vivo.<br>3. **Sistema de Reservas / Mis Viajes (`pages/viajes.html` & `js/viajes.js`)**: Modal de reserva interactivo en `pages/detalle.html` con recálculo dinámico de precios en COP según viajeros y categoría, código único de reserva (`TM-XXXXX`), persistencia `tm_reservas`, filtrado por estado y cancelación en un clic.<br>4. **Sistema Global de Toasts**: Notificaciones flotantes animadas (`mostrarToastGlobal`) sin interrumpir la navegación. |

@@ -1,121 +1,146 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TravelMate</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #F7F3EE;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .container {
-      text-align: center;
-      padding: 40px 24px;
-      max-width: 480px;
-    }
-
-    /* Logo */
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.3em;
-      color: #B0956E;
-      text-transform: uppercase;
-      margin-bottom: 64px;
-    }
-
-    /* Icono central */
-    .icon {
-      font-size: 48px;
-      margin-bottom: 32px;
-      display: block;
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-8px); }
-    }
-
-    /* Título */
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 8vw, 3.6rem);
-      font-weight: 300;
-      line-height: 1.15;
-      color: #2C2520;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-    h1 em {
-      font-style: italic;
-      color: #B0956E;
-    }
-
-    /* Subtítulo */
-    p.sub {
-      font-size: 15px;
-      font-weight: 300;
-      color: #8C7B6E;
-      line-height: 1.75;
-      margin-bottom: 52px;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 72px;
-      font-size: 11px;
-      color: #C0B4A8;
-      letter-spacing: 0.05em;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - TravelMate</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-<div class="container">
+<!-- ===== ENCABEZADO ===== -->
+<header class="encabezado">
+    <div class="contenedor-navegacion">
+        <h1 class="logo"><a href="../index.html">TravelMate</a></h1>
+        <nav>
+            <div class="nav-item">
+                <a href="../index.html" class="nav-link" style="text-decoration: none;">Inicio</a>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Descubrir <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="cuestionario.html">Cuestionario</a>
+                    <a href="preferencias.html">Preferencias</a>
+                    <a href="presupuestos.html">Presupuestos</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Destinos <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="catalogos.html">Catálogo Completo</a>
+                    <a href="filtros.html">Filtros Especiales</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Recomendaciones <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="compatibilidad.html">Compatibilidad</a>
+                    <a href="sorprendeme.html">Sorpréndeme</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Planificador <span class="flecha"></span></span>
+                <div class="dropdown">
+                    <a href="itinerario.html">Itinerario</a>
+                    <a href="actividades.html">Actividades</a>
+                    <a href="presupuesto.html">Presupuesto</a>
+                </div>
+            </div>
+            <button class="boton-principal">
+                <a href="login.html">Ingresar</a>
+            </button>
+        </nav>
+    </div>
+</header>
 
-  <div class="logo">TravelMate</div>
+<!-- ===== HERO DE FAVORITOS ===== -->
+<section class="pagina-dashboard-hero">
+    <div class="seccion-contenedor">
+        <span class="seccion-etiqueta">Colección Personal</span>
+        <h1>Mis Destinos Favoritos</h1>
+        <p>Los lugares que has guardado para inspirarte, comparar presupuestos y planear tu próxima aventura.</p>
+    </div>
+</section>
 
-  <span class="icon">🌍</span>
+<!-- ===== CONTENEDOR PRINCIPAL ===== -->
+<main class="dashboard-contenedor">
+    
+    <!-- Barra superior de conteo y acciones -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div>
+            <h2 style="font-size: 22px; color: var(--color-texto, #2c2520); font-weight: 700; margin: 0;" id="contadorFavoritos">
+                Cargando tus favoritos...
+            </h2>
+            <small style="color: #8c7b6e;">Guarda más destinos explorando el catálogo o detalles.</small>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="catalogos.html" class="btn-modal-secundario" style="text-decoration: none; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px;">
+                <span>🔍 Explorar más</span>
+            </a>
+            <button type="button" id="btnVaciarFavoritos" class="btn-viaje-cancelar" style="font-size: 13px;" title="Eliminar todos los favoritos">
+                🗑️ Limpiar todo
+            </button>
+        </div>
+    </div>
 
-  <h1>Algo <em>hermoso</em><br>está en camino.</h1>
+    <!-- Grid de tarjetas de destinos favoritos -->
+    <div class="catalogo-grid" id="gridFavoritos">
+        <!-- Generado dinámicamente con JavaScript -->
+    </div>
 
-  <p class="sub">Estamos preparando tu nueva forma<br>de explorar el mundo.</p>
+    <!-- Estado vacío cuando no hay favoritos -->
+    <div id="vacioFavoritos" class="tm-estado-vacio-caja" style="display: none;">
+        <span class="tm-vacio-icono">🤍</span>
+        <h3>Aún no tienes destinos guardados</h3>
+        <p>
+            Explora nuestro catálogo con más de 28 destinos mundiales y pulsa en el corazón en cualquier tarjeta para tenerlos siempre a mano aquí.
+        </p>
+        <a href="catalogos.html" class="tm-btn-accion">
+            <span>Explorar Catálogo de Destinos →</span>
+        </a>
+    </div>
 
+</main>
 
-  <footer>© 2026 TravelMate &nbsp;·&nbsp; Todos los derechos reservados</footer>
+<!-- ===== PIE DE PÁGINA ===== -->
+<footer>
+    <div class="footer-brand">
+        <div class="footer-logo">TravelMate</div>
+        <p class="footer-desc">
+            Hacemos que planear un viaje sea claro y sencillo, para jóvenes y para adultos mayores.
+        </p>
+        <p class="footer-tag">Prototipo académico · Datos de demostración</p>
+    </div>
 
-</div>
+    <div class="footer-col">
+        <h3>Explorar</h3>
+        <ul>
+            <li><a href="cuestionario.html">Descubrir mi viaje</a></li>
+            <li><a href="catalogos.html">Catálogo de destinos</a></li>
+            <li><a href="../index.html#como-funciona">Cómo funciona</a></li>
+            <li><a href="sorprendeme.html">Sorpréndeme</a></li>
+        </ul>
+    </div>
 
-<script>
-  function handleSubmit() {
-    const input   = document.getElementById('emailInput');
-    const confirm = document.getElementById('confirm');
-    if (!input.value.includes('@')) {
-      input.style.borderColor = '#E07070';
-      setTimeout(() => input.style.borderColor = '#DDD4C8', 1500);
-      return;
-    }
-    input.disabled = true;
-    input.style.opacity = '0.5';
-    confirm.classList.add('show');
-  }
-</script>
+    <div class="footer-col">
+        <h3>Mi Cuenta</h3>
+        <ul>
+            <li><a href="cuenta.html">Mi Perfil</a></li>
+            <li><a href="viajes.html">Mis Viajes</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="login.html">Iniciar Sesión</a></li>
+        </ul>
+    </div>
 
+    <div class="footer-col">
+        <h3>Sobre los precios</h3>
+        <p>
+            Todos los valores son estimados en pesos colombianos y sirven solo como ejemplo educativo.
+        </p>
+    </div>
+</footer>
+
+<script src="../js/global.js"></script>
+<script src="../js/favoritos.js"></script>
 </body>
 </html>

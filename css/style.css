@@ -622,10 +622,6 @@ nav {
 }
 
 @media (max-width: 600px) {
-    .contenedor-navegacion { padding: 16px 20px; }
-    nav { gap: 16px; }
-    .nav-item:not(:first-child):not(:last-child) { display: none; }
-
     .carr-tarjeta  { width: 190px; height: 305px; margin-left: -95px; }
     .carrusel-pista { height: 305px; }
 
@@ -3558,30 +3554,42 @@ th, td {
 /* Media Query para Pantallas Móviles y Tablets */
 @media (max-width: 920px) {
     .contenedor-navegacion {
-        padding: 16px 20px;
+        padding: 14px 18px;
         position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .btn-hamburguesa {
         display: flex;
+        order: 2;
+    }
+
+    .logo {
+        order: 1;
+        font-size: 24px !important;
     }
 
     /* En pantallas móviles la barra de navegación se convierte en un menú desplegable vertical */
     nav {
+        order: 3;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background: rgba(26, 26, 26, 0.98);
-        backdrop-filter: blur(12px);
+        background: rgba(22, 17, 10, 0.98);
+        backdrop-filter: blur(14px);
         flex-direction: column;
         align-items: stretch;
         gap: 0;
         padding: 16px 20px 24px;
-        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.65);
         border-bottom: 2px solid #f6a800;
         display: none;
-        z-index: 999;
+        z-index: 9999;
     }
 
     nav.menu-movil-activo {
@@ -3606,6 +3614,7 @@ th, td {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        color: #ffffff !important;
     }
 
     /* Submenús en versión móvil */
@@ -3623,7 +3632,8 @@ th, td {
     .dropdown a {
         color: #f7e7c4 !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        padding: 10px 16px !important;
+        padding: 11px 16px !important;
+        display: block !important;
     }
 
     .dropdown a:hover {
@@ -3631,8 +3641,12 @@ th, td {
         color: #f6a800 !important;
     }
 
+    .nav-item.sub-abierto > .dropdown,
     .nav-item.sub-abierto .dropdown {
         display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
     }
 
     .boton-principal {
@@ -3649,6 +3663,7 @@ th, td {
     .usuario-pill {
         max-width: 100%;
         justify-content: center;
+        background: rgba(246, 168, 0, 0.2);
     }
 
     .dropdown-usuario {
@@ -3656,6 +3671,1132 @@ th, td {
         width: 100% !important;
         margin-top: 10px !important;
         box-shadow: none !important;
+        background: #251c0c !important;
     }
 }
 
+/* ================================================================
+   1. SISTEMA GLOBAL DE TOASTS
+   ================================================================ */
+.tm-toasts-contenedor {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.tm-toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1e1913;
+    color: #f7f3ee;
+    padding: 13px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border-left: 4px solid #f6a800;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 380px;
+}
+
+.tm-toast.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tm-toast-exito {
+    border-left-color: #10b981;
+}
+
+.tm-toast-error {
+    border-left-color: #ef4444;
+}
+
+.tm-toast-info {
+    border-left-color: #3b82f6;
+}
+
+.tm-toast-icono {
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* ================================================================
+   2. BOTÓN DE FAVORITOS EN TARJETAS DEL CATÁLOGO
+   ================================================================ */
+.dest-card-fav-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #8c7b6e;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, color 0.2s;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dest-card-fav-btn:hover {
+    transform: scale(1.15);
+    background: #ffffff;
+    color: #e11d48;
+}
+
+.dest-card-fav-btn.activo {
+    background: #ffffff;
+    color: #e11d48;
+}
+
+.dest-card-fav-btn.activo svg {
+    fill: #e11d48;
+}
+
+.dest-card-img {
+    position: relative;
+}
+
+/* ================================================================
+   3. BOTÓN DE FAVORITOS EN PÁGINA DE DETALLE (HERO)
+   ================================================================ */
+.boton-favorito-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 14px;
+}
+
+.boton-favorito-hero:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.boton-favorito-hero.activo {
+    background: #e11d48;
+    border-color: #e11d48;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4);
+}
+
+.boton-favorito-hero .corazon-icono {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ================================================================
+   4. MODAL Y TARJETA DE RESERVA EN PÁGINA DE DETALLE
+   ================================================================ */
+.reserva-cta-banner {
+    background: linear-gradient(135deg, #2c2114, #18120b);
+    border: 1px solid #4a381e;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 36px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #f7f3ee;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.reserva-cta-info h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 28px;
+    color: #f6c03e;
+    margin-bottom: 6px;
+}
+
+.reserva-cta-info p {
+    font-size: 14.5px;
+    color: #c0b4a8;
+}
+
+.btn-abrir-reserva {
+    background: linear-gradient(135deg, #f6a800, #e69100);
+    color: #16110a;
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(246, 168, 0, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-abrir-reserva:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(246, 168, 0, 0.55);
+}
+
+/* Overlay del Modal */
+.tm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(14, 11, 8, 0.75);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.tm-modal-overlay.abierto {
+    display: flex;
+    opacity: 1;
+}
+
+.tm-modal-contenedor {
+    background: #ffffff;
+    width: 100%;
+    max-width: 620px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.tm-modal-overlay.abierto .tm-modal-contenedor {
+    transform: scale(1);
+}
+
+.tm-modal-header {
+    background: #251c11;
+    color: #ffffff;
+    padding: 20px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f6a800;
+}
+
+.tm-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tm-modal-cerrar {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.tm-modal-cerrar:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.tm-modal-body {
+    padding: 26px;
+    overflow-y: auto;
+    font-family: 'DM Sans', Arial, sans-serif;
+    color: #2c2520;
+}
+
+.reserva-grid-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.campo-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo-grupo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6a5746;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.campo-grupo input,
+.campo-grupo select {
+    padding: 11px 14px;
+    border: 1px solid #dcd4c8;
+    border-radius: 8px;
+    font-size: 14.5px;
+    color: #2c2520;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-grupo input:focus,
+.campo-grupo select:focus {
+    border-color: #f6a800;
+    box-shadow: 0 0 0 3px rgba(246, 168, 0, 0.18);
+}
+
+.reserva-desglose-caja {
+    background: #fbf9f5;
+    border: 1px solid #e8e0d4;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+}
+
+.desglose-fila {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #726252;
+    padding: 6px 0;
+}
+
+.desglose-total {
+    border-top: 1px dashed #dcd4c8;
+    margin-top: 8px;
+    padding-top: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #2c2520;
+}
+
+.desglose-total span:last-child {
+    color: #b45309;
+}
+
+.tm-modal-footer {
+    padding: 16px 26px;
+    background: #f7f3ee;
+    border-top: 1px solid #e8e0d4;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-modal-secundario {
+    background: #ffffff;
+    border: 1px solid #dcd4c8;
+    color: #4a3b1e;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-modal-primario {
+    background: linear-gradient(135deg, #f6a800, #e69100);
+    border: none;
+    color: #16110a;
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(246, 168, 0, 0.35);
+}
+
+/* ================================================================
+   5. DISEÑO DE PÁGINAS COMPLETAS (FAVORITOS, CUENTA, MIS VIAJES)
+   ================================================================ */
+.pagina-dashboard-hero {
+    background: linear-gradient(rgba(26, 19, 11, 0.88), rgba(26, 19, 11, 0.94)), url('../assets/img/cartagena.jpg') center/cover;
+    padding: 60px 24px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.pagina-dashboard-hero .seccion-etiqueta {
+    color: #f6c03e;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.pagina-dashboard-hero h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.pagina-dashboard-hero p {
+    font-size: 16px;
+    color: #d6cbbe;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dashboard-contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+/* Estado Vacío Elegante */
+.tm-estado-vacio-caja {
+    text-align: center;
+    padding: 60px 24px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e8e0d4;
+    max-width: 580px;
+    margin: 30px auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+.tm-vacio-icono {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 18px;
+}
+
+.tm-estado-vacio-caja h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 28px;
+    color: #2c2520;
+    margin-bottom: 10px;
+}
+
+.tm-estado-vacio-caja p {
+    font-size: 15px;
+    color: #726252;
+    line-height: 1.6;
+    margin-bottom: 26px;
+}
+
+.tm-btn-accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f6a800, #e69100);
+    color: #16110a;
+    font-weight: 700;
+    padding: 12px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(246, 168, 0, 0.35);
+    transition: transform 0.2s;
+}
+
+.tm-btn-accion:hover {
+    transform: translateY(-2px);
+}
+
+/* ================================================================
+   6. ESTILOS DE LA PÁGINA DE PERFIL / MI CUENTA
+   ================================================================ */
+.perfil-card-resumen {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e8e0d4;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+}
+
+.perfil-avatar-gran {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f6a800, #b45309);
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(180, 83, 9, 0.35);
+}
+
+.perfil-datos-user h2 {
+    font-size: 24px;
+    color: #2c2520;
+    margin-bottom: 6px;
+}
+
+.perfil-datos-user p {
+    font-size: 14px;
+    color: #726252;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.perfil-rol-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.perfil-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 34px;
+}
+
+.perfil-stat-card {
+    background: #ffffff;
+    border: 1px solid #e8e0d4;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.perfil-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icono-caja {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #fff8eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-info-txt strong {
+    display: block;
+    font-size: 22px;
+    color: #2c2520;
+}
+
+.stat-info-txt span {
+    font-size: 13.5px;
+    color: #8c7b6e;
+}
+
+.perfil-secciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+}
+
+@media (max-width: 860px) {
+    .perfil-secciones-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.perfil-bloque-form {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e8e0d4;
+    padding: 28px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.perfil-bloque-form h3 {
+    font-size: 19px;
+    color: #2c2520;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0e9df;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ================================================================
+   7. ESTILOS DE LA PÁGINA DE MIS VIAJES (RESERVAS)
+   ================================================================ */
+.viajes-filtros-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.filtro-viaje-btn {
+    background: #ffffff;
+    border: 1px solid #dcd4c8;
+    color: #6a5746;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.filtro-viaje-btn.activo,
+.filtro-viaje-btn:hover {
+    background: #251c11;
+    color: #f6c03e;
+    border-color: #251c11;
+}
+
+.viajes-lista-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.viaje-item-card {
+    background: #ffffff;
+    border: 1px solid #e8e0d4;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.viaje-item-card:hover {
+    transform: translateY(-2px);
+}
+
+.viaje-card-foto {
+    width: 280px;
+    min-width: 280px;
+    position: relative;
+}
+
+.viaje-card-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.viaje-card-info {
+    padding: 24px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.viaje-header-linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.viaje-codigo {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #8c7b6e;
+    text-transform: uppercase;
+}
+
+.viaje-nombre-dest {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c2520;
+    margin-top: 4px;
+}
+
+.viaje-badge-estado {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.badge-confirmada {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge-cancelada {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-completada {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.viaje-detalles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin: 14px 0 18px;
+    padding: 14px 0;
+    border-top: 1px solid #f0e9df;
+    border-bottom: 1px solid #f0e9df;
+}
+
+.v-detalle-item span {
+    display: block;
+    font-size: 12px;
+    color: #8c7b6e;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.v-detalle-item strong {
+    font-size: 14.5px;
+    color: #2c2520;
+}
+
+.viaje-footer-acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.viaje-precio-total span {
+    font-size: 12px;
+    color: #8c7b6e;
+    display: block;
+}
+
+.viaje-precio-total strong {
+    font-size: 20px;
+    color: #b45309;
+}
+
+.viaje-btns-grupo {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-viaje-detalle {
+    background: #f7f3ee;
+    border: 1px solid #dcd4c8;
+    color: #4a3b1e;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13.5px;
+    text-decoration: none;
+}
+
+.btn-viaje-cancelar {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .viaje-item-card {
+        flex-direction: column;
+    }
+    .viaje-card-foto {
+        width: 100%;
+        height: 180px;
+    }
+}
+
+/* ================================================================
+   8. SOPORTE DE MODO OSCURO PARA LOS NUEVOS MÓDULOS
+   ================================================================ */
+body.modo-oscuro .tm-estado-vacio-caja,
+body.modo-oscuro .perfil-card-resumen,
+body.modo-oscuro .perfil-stat-card,
+body.modo-oscuro .perfil-bloque-form,
+body.modo-oscuro .viaje-item-card,
+body.modo-oscuro .tm-modal-contenedor {
+    background: #1c160f !important;
+    border-color: #3d2f1f !important;
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .campo-grupo input,
+body.modo-oscuro .campo-grupo select,
+body.modo-oscuro .reserva-desglose-caja {
+    background: #251e15 !important;
+    border-color: #4a381e !important;
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .tm-estado-vacio-caja h3,
+body.modo-oscuro .perfil-datos-user h2,
+body.modo-oscuro .stat-info-txt strong,
+body.modo-oscuro .perfil-bloque-form h3,
+body.modo-oscuro .viaje-nombre-dest,
+body.modo-oscuro .v-detalle-item strong,
+body.modo-oscuro .desglose-total {
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .dest-card-fav-btn {
+    background: rgba(30, 24, 16, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #d6cbbe;
+}
+
+body.modo-oscuro .dest-card-fav-btn.activo {
+    background: #251c11;
+    color: #fb7185;
+}
+
+body.modo-oscuro .btn-modal-secundario,
+body.modo-oscuro .btn-viaje-detalle {
+    background: #2a2014 !important;
+    border-color: #4a381e !important;
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .tm-modal-footer {
+    background: #16110b !important;
+    border-color: #3d2f1f !important;
+}
+
+
+
+/* ================================================================
+   9. MODAL DE CONFIRMACIÓN EXITOSA DE RESERVA
+   Animación SVG checkmark + resumen visual + acciones claras
+   ================================================================ */
+
+/* Cabecera con gradiente de celebración */
+.exito-modal-header {
+    background: linear-gradient(135deg, #065f46, #047857, #059669);
+    padding: 36px 30px 28px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de partículas / brillo sutil */
+.exito-modal-header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+    animation: brilloRotar 4s linear infinite;
+}
+
+@keyframes brilloRotar {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Círculo del checkmark animado */
+.exito-checkmark-circulo {
+    position: relative;
+    z-index: 2;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.08);
+}
+
+.exito-checkmark-svg {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
+.exito-circulo {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: rgba(255, 255, 255, 0.4);
+    animation: circuloDibujar 0.6s ease-in-out 0.2s forwards;
+}
+
+.exito-check {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke: #ffffff;
+    animation: checkDibujar 0.35s ease-in-out 0.7s forwards;
+}
+
+@keyframes circuloDibujar {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkDibujar {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Etiqueta verde */
+.exito-etiqueta {
+    display: inline-block;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-top: 24px;
+    border: 1px solid #a7f3d0;
+}
+
+/* Código de reserva tipo ticket */
+.exito-codigo-caja {
+    margin: 18px auto 8px;
+    background: #fffbeb;
+    border: 2px dashed #f6a800;
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 220px;
+}
+
+.exito-codigo-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #92400e;
+    font-weight: 600;
+}
+
+.exito-codigo-valor {
+    font-size: 26px;
+    font-weight: 800;
+    color: #b45309;
+    letter-spacing: 0.06em;
+    font-family: 'Courier New', monospace;
+}
+
+/* Título y destino */
+.exito-titulo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #2c2520;
+    margin: 20px 0 6px;
+}
+
+.exito-destino-nombre {
+    font-size: 18px;
+    font-weight: 700;
+    color: #065f46;
+    margin-bottom: 20px;
+}
+
+/* Grid de resumen 2x2 */
+.exito-resumen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.exito-resumen-item {
+    background: #f7f3ee;
+    border: 1px solid #e8e0d4;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.exito-item-icono {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.exito-resumen-item small {
+    display: block;
+    font-size: 11px;
+    color: #8c7b6e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.exito-resumen-item strong {
+    display: block;
+    font-size: 14px;
+    color: #2c2520;
+    font-weight: 700;
+}
+
+/* Mensaje de pie */
+.exito-mensaje-pie {
+    font-size: 13.5px;
+    color: #726252;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 0 10px;
+}
+
+/* Botones de acción */
+.exito-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.exito-btn-principal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(246, 168, 0, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.exito-btn-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(246, 168, 0, 0.5);
+}
+
+.exito-btn-seguir {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.exito-btn-seguir:hover {
+    background: #f0e9df;
+}
+
+/* Responsive para el modal de éxito */
+@media (max-width: 520px) {
+    .exito-resumen-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exito-codigo-valor {
+        font-size: 22px;
+    }
+
+    .exito-titulo {
+        font-size: 22px;
+    }
+}
+
+/* Modo oscuro para el modal de éxito */
+body.modo-oscuro .exito-codigo-caja {
+    background: #2a2014 !important;
+    border-color: #b45309 !important;
+}
+
+body.modo-oscuro .exito-etiqueta {
+    background: #1c2e25 !important;
+    color: #6ee7b7 !important;
+    border-color: #065f46 !important;
+}
+
+body.modo-oscuro .exito-resumen-item {
+    background: #251e15 !important;
+    border-color: #3d2f1f !important;
+}
+
+body.modo-oscuro .exito-resumen-item strong {
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .exito-titulo {
+    color: #f7f3ee !important;
+}
+
+body.modo-oscuro .exito-destino-nombre {
+    color: #6ee7b7 !important;
+}
+
+body.modo-oscuro .exito-mensaje-pie {
+    color: #c0b4a8 !important;
+}
+
+body.modo-oscuro .exito-btn-seguir {
+    background: #2a2014 !important;
+    border-color: #4a381e !important;
+    color: #f7f3ee !important;
+}

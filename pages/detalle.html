@@ -75,6 +75,11 @@
         </div>
         <h1 class="detalle-titulo" id="detNombre">Cartagena de Indias</h1>
         <p class="detalle-subtitulo" id="detPais">Colombia · América del Sur</p>
+        
+        <button type="button" class="boton-favorito-hero" id="btnFavoritoHero" title="Guardar en favoritos">
+            <span class="corazon-icono">♡</span>
+            <span class="texto-fav">Guardar en Favoritos</span>
+        </button>
     </div>
 </section>
 
@@ -117,6 +122,17 @@
             <p id="detDescripcionCompleta" class="descripcion-texto">
                 Cargando información descriptiva del destino...
             </p>
+        </div>
+
+        <!-- Banner Prominente de Reserva Directa -->
+        <div class="reserva-cta-banner">
+            <div class="reserva-cta-info">
+                <h3>¿Listo para vivir esta aventura?</h3>
+                <p>Asegura tus fechas ahora con tarifas directas, cancelación flexible y acompañamiento 24/7 en español.</p>
+            </div>
+            <button type="button" class="btn-abrir-reserva" id="btnAbrirModalReserva">
+                <span>✈️ Reservar este Viaje</span>
+            </button>
         </div>
     </div>
 </section>
@@ -235,6 +251,164 @@
         </div>
     </div>
 </section>
+
+<!-- ===== MODAL DE RESERVA INTERACTIVO ===== -->
+<div class="tm-modal-overlay" id="modalReserva">
+    <div class="tm-modal-contenedor">
+        <div class="tm-modal-header">
+            <h3><span>✈️</span> Reserva tu Aventura en <span id="resModalDestino">Destino</span></h3>
+            <button type="button" class="tm-modal-cerrar" id="btnCerrarModalReserva" aria-label="Cerrar modal">✕</button>
+        </div>
+        <form id="formReservaViaje" class="tm-modal-body">
+            <div class="reserva-grid-campos">
+                <div class="campo-grupo">
+                    <label for="resFechaSalida">Fecha de Salida</label>
+                    <input type="date" id="resFechaSalida" required>
+                </div>
+                <div class="campo-grupo">
+                    <label for="resFechaRegreso">Fecha de Regreso</label>
+                    <input type="date" id="resFechaRegreso" required>
+                </div>
+            </div>
+
+            <div class="reserva-grid-campos">
+                <div class="campo-grupo">
+                    <label for="resViajeros">Número de Viajeros</label>
+                    <select id="resViajeros">
+                        <option value="1">1 Persona (Viajero Solo)</option>
+                        <option value="2" selected>2 Personas (Pareja / Amigos)</option>
+                        <option value="3">3 Personas</option>
+                        <option value="4">4 Personas (Familia)</option>
+                        <option value="5">5 Personas (Grupo)</option>
+                    </select>
+                </div>
+                <div class="campo-grupo">
+                    <label for="resAlojamiento">Categoría de Experiencia</label>
+                    <select id="resAlojamiento">
+                        <option value="Estándar">Estándar (Hoteles 3-4★ recomendados)</option>
+                        <option value="Confort Superior" selected>Confort Superior (+ Tours incluidos)</option>
+                        <option value="Lujo & Exclusivo">Lujo & Exclusivo (Resorts 5★ + Guía)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="reserva-grid-campos">
+                <div class="campo-grupo">
+                    <label for="resTitularNombre">Nombre del Titular</label>
+                    <input type="text" id="resTitularNombre" placeholder="Tu nombre completo" required>
+                </div>
+                <div class="campo-grupo">
+                    <label for="resTitularEmail">Correo de Confirmación</label>
+                    <input type="email" id="resTitularEmail" placeholder="correo@ejemplo.com" required>
+                </div>
+            </div>
+
+            <div class="campo-grupo">
+                <label for="resTitularTel">WhatsApp / Celular de Contacto</label>
+                <input type="tel" id="resTitularTel" placeholder="+57 300 123 4567" required>
+            </div>
+
+            <div class="reserva-desglose-caja">
+                <div class="desglose-fila">
+                    <span>Precio base por viajero</span>
+                    <span id="resDesgloseBase">$0 COP</span>
+                </div>
+                <div class="desglose-fila">
+                    <span>Multiplicador por viajeros</span>
+                    <span id="resDesgloseViajeros">x 2</span>
+                </div>
+                <div class="desglose-fila">
+                    <span>Ajuste por categoría</span>
+                    <span id="resDesgloseCat">Incluido</span>
+                </div>
+                <div class="desglose-fila desglose-total">
+                    <span>Total Estimado</span>
+                    <strong id="resDesgloseTotal">$0 COP</strong>
+                </div>
+            </div>
+
+            <div class="tm-modal-footer" style="padding:0; background:transparent; border:none; margin-top:14px;">
+                <button type="button" class="btn-modal-secundario" id="btnCancelarReservaModal">Cancelar</button>
+                <button type="submit" class="btn-modal-primario">Confirmar y Guardar Reserva →</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== MODAL DE CONFIRMACIÓN EXITOSA (Reemplaza al confirm() del navegador) ===== -->
+<div class="tm-modal-overlay" id="modalExitoReserva">
+    <div class="tm-modal-contenedor" style="max-width: 520px; text-align: center;">
+
+        <!-- Animación de checkmark de éxito -->
+        <div class="exito-modal-header">
+            <div class="exito-checkmark-circulo">
+                <svg class="exito-checkmark-svg" viewBox="0 0 52 52" width="72" height="72">
+                    <circle class="exito-circulo" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="exito-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+        </div>
+
+        <div style="padding: 0 30px 30px;">
+            <!-- Etiqueta y Código -->
+            <span class="exito-etiqueta">Reserva Confirmada</span>
+            <div class="exito-codigo-caja" id="exitoCodigoCaja">
+                <span class="exito-codigo-label">Código de Reserva</span>
+                <strong class="exito-codigo-valor" id="exitoCodigoValor">TM-00000</strong>
+            </div>
+
+            <!-- Detalles rápidos -->
+            <h2 class="exito-titulo" id="exitoTitulo">🎉 ¡Tu viaje está asegurado!</h2>
+            <p class="exito-destino-nombre" id="exitoDestinoNombre">Cartagena de Indias</p>
+
+            <div class="exito-resumen-grid">
+                <div class="exito-resumen-item">
+                    <span class="exito-item-icono">📅</span>
+                    <div>
+                        <small>Fechas</small>
+                        <strong id="exitoFechas">20/11/2026 - 25/11/2026</strong>
+                    </div>
+                </div>
+                <div class="exito-resumen-item">
+                    <span class="exito-item-icono">👥</span>
+                    <div>
+                        <small>Viajeros</small>
+                        <strong id="exitoViajeros">2 Personas</strong>
+                    </div>
+                </div>
+                <div class="exito-resumen-item">
+                    <span class="exito-item-icono">💰</span>
+                    <div>
+                        <small>Inversión Total</small>
+                        <strong id="exitoPrecio">$4.900.000 COP</strong>
+                    </div>
+                </div>
+                <div class="exito-resumen-item">
+                    <span class="exito-item-icono">🏨</span>
+                    <div>
+                        <small>Categoría</small>
+                        <strong id="exitoCategoria">Confort Superior</strong>
+                    </div>
+                </div>
+            </div>
+
+            <p class="exito-mensaje-pie">
+                Recibirás un correo de confirmación con tu itinerario completo y todos los detalles de tu aventura. ¡Buen viaje! ✈️
+            </p>
+
+            <!-- Botones de acción -->
+            <div class="exito-acciones">
+                <a href="viajes.html" class="btn-modal-primario exito-btn-principal" id="exitoBtnVerViajes">
+                    ✈️ Ver Mis Viajes y Reservas
+                </a>
+                <button type="button" class="btn-modal-secundario exito-btn-seguir" id="exitoBtnSeguir">
+                    Seguir Explorando Destinos
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <!-- ===== 9. PIE DE PÁGINA ===== -->
 <footer>
