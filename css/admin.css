@@ -555,7 +555,9 @@ body {
   z-index: 10000;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .admin-modal-overlay.active {
@@ -565,14 +567,29 @@ body {
 .admin-modal {
   background: #ffffff;
   border-radius: 20px;
-  padding: 32px;
-  max-width: 600px;
+  padding: 26px 22px;
+  max-width: 720px;
   width: 100%;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
   border: 1px solid var(--admin-borde);
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 88vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin: auto;
   animation: popIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+/* Scrollbar estilizada y limpia para que no tape los campos */
+.admin-modal::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-modal::-webkit-scrollbar-thumb {
+  background: rgba(246, 168, 0, 0.4);
+  border-radius: 4px;
+}
+.admin-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-dorado);
 }
 
 @keyframes popIn {
@@ -584,14 +601,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--admin-borde);
+  box-sizing: border-box;
 }
 
 .admin-modal-header h3 {
   font-family: Georgia, serif;
-  font-size: 22px;
+  font-size: 21px;
   color: var(--admin-oscuro);
 }
 
@@ -605,38 +623,58 @@ body {
 
 .btn-cerrar-modal:hover { color: #000; }
 
-/* Grid de Formulario */
+.admin-modal form {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Grid de Formulario con columnas seguras */
 .form-grid-2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .admin-field label {
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--admin-gris);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .admin-field input,
 .admin-field select,
 .admin-field textarea {
-  padding: 12px 14px;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  padding: 11px 13px;
   border: 1.5px solid var(--admin-borde);
   border-radius: 12px;
-  font-size: 14.5px;
+  font-size: 14px;
   background: #fffdf9;
   outline: none;
   transition: all 0.2s;
+  overflow: hidden;
 }
 
 .admin-field input:focus,
@@ -651,9 +689,11 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--admin-borde);
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 /* RESPONSIVE */
@@ -666,9 +706,37 @@ body {
     position: relative;
   }
   .admin-content {
-    padding: 24px 18px;
+    padding: 20px 14px;
   }
   .form-grid-2 {
     grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .admin-modal {
+    padding: 20px 16px;
+    max-height: 90vh;
+    width: 96%;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-modal-overlay {
+    padding: 8px;
+  }
+  .admin-modal {
+    padding: 16px 12px;
+    border-radius: 14px;
+    max-height: 92vh;
+  }
+  .admin-modal-header h3 {
+    font-size: 18px;
+  }
+  .admin-modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-modal-footer button {
+    width: 100%;
+    justify-content: center;
   }
 }

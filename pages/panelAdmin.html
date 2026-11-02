@@ -138,7 +138,7 @@
                 <option value="">Todos los Estados</option>
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
-                <option value="Bloqueado">Bloqueado</option>
+                <option value="Suspendido">Suspendido</option>
               </select>
             </div>
           </div>
@@ -149,6 +149,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Documento</th>
                   <th>Nombre y Contacto</th>
                   <th>Correo Electrónico</th>
                   <th>Rol / Jerarquía</th>
@@ -255,22 +256,56 @@
 
         <div class="form-grid-2">
           <div class="admin-field">
-            <label>Nombre Completo *</label>
-            <input type="text" id="u_nombre" placeholder="Ej: Santiago Pérez" required />
+            <label>Nombres *</label>
+            <input type="text" id="u_nombres" placeholder="Ej: Santiago" required />
           </div>
           <div class="admin-field">
-            <label>Correo Electrónico *</label>
-            <input type="email" id="u_email" placeholder="correo@travelmate.com" required />
+            <label>Apellidos *</label>
+            <input type="text" id="u_apellidos" placeholder="Ej: Pérez Gómez" required />
           </div>
         </div>
 
         <div class="form-grid-2">
           <div class="admin-field">
-            <label>Teléfono de Contacto</label>
-            <input type="text" id="u_telefono" placeholder="+57 300 1234567" />
+            <label>Tipo Documento *</label>
+            <select id="u_tipo_doc">
+              <option value="CC" selected>C.C. (Cédula de Ciudadanía)</option>
+              <option value="CE">C.E. (Cédula de Extranjería)</option>
+              <option value="PASAPORTE">Pasaporte</option>
+              <option value="DNI">DNI</option>
+            </select>
           </div>
           <div class="admin-field">
-            <label>País</label>
+            <label>Número de Documento *</label>
+            <input type="text" id="u_num_doc" placeholder="Ej: 1020304050" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Correo Electrónico *</label>
+            <input type="email" id="u_email" placeholder="correo@travelmate.com" required />
+          </div>
+          <div class="admin-field">
+            <label>Teléfono Principal *</label>
+            <input type="text" id="u_telefono" placeholder="+57 300 1234567" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Teléfono Emergencia *</label>
+            <input type="text" id="u_tel_emergencia" placeholder="+57 311 9876543" required />
+          </div>
+          <div class="admin-field">
+            <label>Contacto de Emergencia *</label>
+            <input type="text" id="u_contacto_emergencia" placeholder="Familiar o allegado" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>País Residencia *</label>
             <select id="u_pais">
               <option value="Colombia">🇨🇴 Colombia</option>
               <option value="México">🇲🇽 México</option>
@@ -280,6 +315,41 @@
               <option value="Otro">🌍 Otro país</option>
             </select>
           </div>
+          <div class="admin-field">
+            <label>Ciudad Residencia</label>
+            <input type="text" id="u_ciudad" placeholder="Ej: Medellín" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label>Dirección de Residencia</label>
+          <input type="text" id="u_direccion" placeholder="Ej: Calle 50 # 40-20 Apto 301" />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Fecha de Nacimiento</label>
+            <input type="date" id="u_fecha_nac" />
+          </div>
+          <div class="admin-field">
+            <label>Género</label>
+            <select id="u_genero">
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label>Estilo de Viaje Preferido</label>
+          <select id="u_estilo">
+            <option value="Playa & Relax">🏖️ Playa & Relax Tropical</option>
+            <option value="Cultura & Museos">🏛️ Cultura, Museos e Historia</option>
+            <option value="Aventura & Montaña">🏔️ Aventura, Senderismo y Naturaleza</option>
+            <option value="Gastronomía & Vinos">🍽️ Gastronomía y Experiencias Culinarias</option>
+            <option value="Romance & Lujo">🍷 Escapadas Románticas y Lujo</option>
+          </select>
         </div>
 
         <div class="form-grid-2">
@@ -293,11 +363,11 @@
             </select>
           </div>
           <div class="admin-field">
-            <label>Estado de Cuenta</label>
+            <label>Estado de Cuenta *</label>
             <select id="u_estado">
               <option value="Activo">Activo (Habilitado)</option>
               <option value="Inactivo">Inactivo (En pausa)</option>
-              <option value="Bloqueado">Bloqueado (Acceso revocado)</option>
+              <option value="Suspendido">Suspendido</option>
             </select>
           </div>
         </div>
@@ -326,9 +396,33 @@
       <form id="formPaqueteAdmin" onsubmit="guardarPaqueteAdmin(event)">
         <input type="hidden" id="p_id_edit" />
 
-        <div class="admin-field">
-          <label>Nombre del Paquete *</label>
-          <input type="text" id="p_nombre" placeholder="Ej: Machu Picchu Imperial" required />
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Nombre del Destino / Paquete *</label>
+            <input type="text" id="p_nombre" placeholder="Ej: Cartagena de Indias" required />
+          </div>
+          <div class="admin-field">
+            <label>Código IATA Ciudad *</label>
+            <input type="text" id="p_iata" placeholder="Ej: CTG, PAR, TYO" maxlength="3" style="text-transform:uppercase;" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>País *</label>
+            <input type="text" id="p_pais" placeholder="Ej: Colombia" required />
+          </div>
+          <div class="admin-field">
+            <label>Continente *</label>
+            <select id="p_continente">
+              <option value="América del Sur">América del Sur</option>
+              <option value="América del Norte">América del Norte</option>
+              <option value="Europa">Europa</option>
+              <option value="Asia">Asia</option>
+              <option value="África">África</option>
+              <option value="Oceanía">Oceanía</option>
+            </select>
+          </div>
         </div>
 
         <div class="admin-field">
@@ -338,8 +432,30 @@
 
         <div class="form-grid-2">
           <div class="admin-field">
-            <label>Precio Estimado (COP) *</label>
-            <input type="number" id="p_precio" placeholder="2500000" required />
+            <label>Precio Base COP (`precio_base_cop`) *</label>
+            <input type="number" id="p_precio" placeholder="2450000" required />
+          </div>
+          <div class="admin-field">
+            <label>Duración Promedio (Días)</label>
+            <input type="number" id="p_duracion" placeholder="5" value="5" min="1" max="30" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Mejor Época de Viaje</label>
+            <input type="text" id="p_temporada" placeholder="Ej: Diciembre a Abril" />
+          </div>
+          <div class="admin-field">
+            <label>Idioma Oficial</label>
+            <input type="text" id="p_idioma" placeholder="Ej: Español / Francés" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="admin-field">
+            <label>Moneda Local</label>
+            <input type="text" id="p_moneda" placeholder="Ej: COP / EUR / USD" />
           </div>
           <div class="admin-field">
             <label>Hoteles Ofertados</label>
@@ -371,6 +487,19 @@
           <button type="submit" class="btn-principal">Guardar Paquete ✈️</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ===== MODAL FLOTANTE: CONFIRMACIÓN DE ACCIÓN (Reemplaza confirm() del navegador) ===== -->
+  <div class="admin-modal-overlay" id="modalConfirmarAdmin">
+    <div class="admin-modal" style="max-width: 440px; text-align: center; padding: 26px;">
+      <div style="font-size: 42px; margin-bottom: 12px;">⚠️</div>
+      <h3 id="modalConfirmarTitulo" style="font-family: Georgia, serif; font-size: 20px; color: var(--admin-oscuro); margin-bottom: 8px;">¿Confirmar acción?</h3>
+      <p id="modalConfirmarMensaje" style="font-size: 14px; color: var(--admin-gris); margin-bottom: 22px; line-height: 1.5;">Esta acción modificará la base de datos local.</p>
+      <div class="admin-modal-footer" style="justify-content: center; gap: 12px; margin-top: 0; padding-top: 0; border-top: none;">
+        <button type="button" class="btn-secundario" id="btnCancelarConfirmarAdmin" onclick="cerrarModalConfirmarAdmin()">Cancelar</button>
+        <button type="button" class="btn-principal" id="btnAceptarConfirmarAdmin" style="background: #dc2626; color: #fff;">Confirmar</button>
+      </div>
     </div>
   </div>
 

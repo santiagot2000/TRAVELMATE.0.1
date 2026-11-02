@@ -503,23 +503,6 @@ function configurarModalReserva(d) {
 
     return total;
   }
-      multCat = 0.85;
-      labelCat = '-15% (Económico)';
-    } else if (cat === 'Lujo & Exclusivo') {
-      multCat = 1.40;
-      labelCat = '+40% (Lujo 5★)';
-    }
-
-    var precioBasePersona = d.precioTotal || 2450000;
-    var total = Math.round(precioBasePersona * multCat * numViajeros);
-
-    if (txtBase) txtBase.textContent = '$' + precioBasePersona.toLocaleString('es-CO') + ' COP';
-    if (txtViajeros) txtViajeros.textContent = 'x ' + numViajeros + (numViajeros === 1 ? ' persona' : ' personas');
-    if (txtCat) txtCat.textContent = labelCat;
-    if (txtTotal) txtTotal.textContent = '$' + total.toLocaleString('es-CO') + ' COP';
-
-    return total;
-  }
 
   recalcularPrecioReserva();
 
