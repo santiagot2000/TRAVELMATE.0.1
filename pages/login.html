@@ -189,6 +189,49 @@
           <div class="campo-msg" id="msgRegEmail"></div>
         </div>
 
+        <!-- Tipo y Número de Documento (Identificación Real) -->
+        <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px;">
+          <div class="campo-grupo">
+            <label class="campo-label" for="regTipoDoc">
+              Doc. <span class="req">*</span>
+            </label>
+            <select id="regTipoDoc" class="campo-select" style="padding: 10px 8px;">
+              <option value="CC" selected>C.C.</option>
+              <option value="CE">C.E.</option>
+              <option value="PASAPORTE">Pasaporte</option>
+              <option value="DNI">DNI</option>
+            </select>
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label" for="regNumDoc">
+              Número de Identificación <span class="req">*</span>
+            </label>
+            <div class="campo-wrap">
+              <input type="text" id="regNumDoc" class="campo-input" placeholder="Ej: 1020304050" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teléfono Principal y de Emergencia -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="campo-grupo">
+            <label class="campo-label" for="regTelefono">
+              Teléfono / WhatsApp <span class="req">*</span>
+            </label>
+            <div class="campo-wrap">
+              <input type="tel" id="regTelefono" class="campo-input" placeholder="+57 300 123 4567" required>
+            </div>
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label" for="regTelEmergencia">
+              Tel. Emergencia <span class="req">*</span>
+            </label>
+            <div class="campo-wrap">
+              <input type="tel" id="regTelEmergencia" class="campo-input" placeholder="+57 311 987 6543" required>
+            </div>
+          </div>
+        </div>
+
         <!-- Selector de País -->
         <div class="campo-grupo">
           <label class="campo-label" for="regPais">

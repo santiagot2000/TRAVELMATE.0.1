@@ -146,9 +146,38 @@
                         <small style="font-size: 12px; color: #8c7b6e;">Tu email no puede modificarse por seguridad.</small>
                     </div>
 
+                    <!-- Documento de Identidad Real -->
+                    <div class="reserva-grid-campos" style="margin-bottom: 16px;">
+                        <div class="campo-grupo">
+                            <label for="selectTipoDocPerfil">Tipo Documento</label>
+                            <select id="selectTipoDocPerfil">
+                                <option value="CC">C.C. (Cédula de Ciudadanía)</option>
+                                <option value="CE">C.E. (Cédula de Extranjería)</option>
+                                <option value="PASAPORTE">Pasaporte</option>
+                                <option value="DNI">DNI</option>
+                            </select>
+                        </div>
+                        <div class="campo-grupo">
+                            <label for="inputNumDocPerfil">Número de Documento</label>
+                            <input type="text" id="inputNumDocPerfil" placeholder="Ej: 1020304050">
+                        </div>
+                    </div>
+
+                    <!-- Teléfonos y Contacto de Emergencia -->
+                    <div class="reserva-grid-campos" style="margin-bottom: 16px;">
+                        <div class="campo-grupo">
+                            <label for="inputTelefonoPerfil">Teléfono Principal</label>
+                            <input type="tel" id="inputTelefonoPerfil" placeholder="+57 300 123 4567">
+                        </div>
+                        <div class="campo-grupo">
+                            <label for="inputTelEmergenciaPerfil">Tel. Emergencia</label>
+                            <input type="tel" id="inputTelEmergenciaPerfil" placeholder="+57 311 987 6543">
+                        </div>
+                    </div>
+
                     <div class="campo-grupo" style="margin-bottom: 16px;">
-                        <label for="inputTelefonoPerfil">Teléfono / WhatsApp</label>
-                        <input type="tel" id="inputTelefonoPerfil" placeholder="+57 300 123 4567">
+                        <label for="inputContactoEmergenciaPerfil">Nombre Contacto de Emergencia</label>
+                        <input type="text" id="inputContactoEmergenciaPerfil" placeholder="Familiar o persona responsable">
                     </div>
 
                     <div class="reserva-grid-campos">

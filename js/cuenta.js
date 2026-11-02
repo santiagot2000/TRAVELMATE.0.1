@@ -90,16 +90,24 @@ function inicializarPerfil() {
   // 3. Prellenar Formulario de Datos Personales
   var inputNombre = document.getElementById('inputNombrePerfil');
   var inputEmail = document.getElementById('inputEmailPerfil');
+  var selectTipoDoc = document.getElementById('selectTipoDocPerfil');
+  var inputNumDoc = document.getElementById('inputNumDocPerfil');
   var inputTel = document.getElementById('inputTelefonoPerfil');
+  var inputTelEmergencia = document.getElementById('inputTelEmergenciaPerfil');
+  var inputContactoEmergencia = document.getElementById('inputContactoEmergenciaPerfil');
   var selectPais = document.getElementById('selectPaisPerfil');
   var inputCiudad = document.getElementById('inputCiudadPerfil');
   var selectEstilo = document.getElementById('selectEstiloPerfil');
 
   if (inputNombre) inputNombre.value = usuario.nombre || '';
   if (inputEmail) inputEmail.value = usuario.email || '';
-  if (inputTel) inputTel.value = usuario.telefono || '';
-  if (selectPais && usuario.pais) selectPais.value = usuario.pais;
-  if (inputCiudad) inputCiudad.value = usuario.ciudad || 'Medellín';
+  if (selectTipoDoc && usuario.tipo_documento) selectTipoDoc.value = usuario.tipo_documento;
+  if (inputNumDoc) inputNumDoc.value = usuario.numero_documento || '';
+  if (inputTel) inputTel.value = usuario.telefono_principal || usuario.telefono || '';
+  if (inputTelEmergencia) inputTelEmergencia.value = usuario.telefono_emergencia || '';
+  if (inputContactoEmergencia) inputContactoEmergencia.value = usuario.nombre_contacto_emergencia || '';
+  if (selectPais && (usuario.pais_residencia || usuario.pais)) selectPais.value = usuario.pais_residencia || usuario.pais;
+  if (inputCiudad) inputCiudad.value = usuario.ciudad_residencia || usuario.ciudad || 'Medellín';
   if (selectEstilo && usuario.estilo) selectEstilo.value = usuario.estilo;
 
   // 4. Manejo del Formulario de Datos Personales
@@ -109,7 +117,11 @@ function inicializarPerfil() {
       e.preventDefault();
 
       var nuevoNombre = inputNombre.value.trim();
-      var nuevoTel = inputTel.value.trim();
+      var nuevoTipoDoc = selectTipoDoc ? selectTipoDoc.value : 'CC';
+      var nuevoNumDoc = inputNumDoc ? inputNumDoc.value.trim() : '';
+      var nuevoTel = inputTel ? inputTel.value.trim() : '';
+      var nuevoTelEmergencia = inputTelEmergencia ? inputTelEmergencia.value.trim() : '';
+      var nuevoContactoEmergencia = inputContactoEmergencia ? inputContactoEmergencia.value.trim() : '';
       var nuevoPais = selectPais.value;
       var nuevaCiudad = inputCiudad.value.trim();
       var nuevoEstilo = selectEstilo.value;
@@ -123,8 +135,15 @@ function inicializarPerfil() {
 
       // Actualizar objeto usuario
       usuario.nombre = nuevoNombre;
+      usuario.tipo_documento = nuevoTipoDoc;
+      usuario.numero_documento = nuevoNumDoc;
+      usuario.telefono_principal = nuevoTel;
       usuario.telefono = nuevoTel;
+      usuario.telefono_emergencia = nuevoTelEmergencia;
+      usuario.nombre_contacto_emergencia = nuevoContactoEmergencia;
+      usuario.pais_residencia = nuevoPais;
       usuario.pais = nuevoPais;
+      usuario.ciudad_residencia = nuevaCiudad;
       usuario.ciudad = nuevaCiudad;
       usuario.estilo = nuevoEstilo;
 
@@ -139,8 +158,15 @@ function inicializarPerfil() {
         var indice = usuarios.findIndex(function(u) { return u.email === usuario.email; });
         if (indice >= 0) {
           usuarios[indice].nombre = nuevoNombre;
+          usuarios[indice].tipo_documento = nuevoTipoDoc;
+          usuarios[indice].numero_documento = nuevoNumDoc;
+          usuarios[indice].telefono_principal = nuevoTel;
           usuarios[indice].telefono = nuevoTel;
+          usuarios[indice].telefono_emergencia = nuevoTelEmergencia;
+          usuarios[indice].nombre_contacto_emergencia = nuevoContactoEmergencia;
+          usuarios[indice].pais_residencia = nuevoPais;
           usuarios[indice].pais = nuevoPais;
+          usuarios[indice].ciudad_residencia = nuevaCiudad;
           usuarios[indice].ciudad = nuevaCiudad;
           usuarios[indice].estilo = nuevoEstilo;
           localStorage.setItem('tm_usuarios', JSON.stringify(usuarios));

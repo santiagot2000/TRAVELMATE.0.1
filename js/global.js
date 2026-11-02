@@ -413,6 +413,7 @@ function crearNuevaReserva(datos) {
 
   var nueva = {
     id: randomId,
+    codigo_reserva: randomId,
     usuarioEmail: datos.usuarioEmail || 'usuario@travelmate.com',
     destinoId: datos.destinoId || 'destino',
     destinoNombre: datos.destinoNombre || 'Destino Maravilloso',
@@ -424,8 +425,12 @@ function crearNuevaReserva(datos) {
     viajeros: datos.viajeros || 1,
     alojamiento: datos.alojamiento || 'Estándar',
     precioTotal: datos.precioTotal || 0,
+    metodoPago: datos.metodoPago || 'PSE',
     estado: 'Confirmada',
+    estado_reserva: 'Confirmada',
     fechaCreacion: new Date().toISOString(),
+    fecha_creacion: new Date().toISOString(),
+    pasajeros: datos.pasajeros || [],
     titular: datos.titular || {}
   };
 

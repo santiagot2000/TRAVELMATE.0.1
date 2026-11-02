@@ -18,13 +18,15 @@
 ## ⚙️ 2. Especificación de Requerimientos Funcionales (Funciones del Aplicativo)
 
 ### **RF-01: Hero Carrusel 3D e Impacto Visual Inicial**
+
 * **Descripción:** Presentación interactiva de destinos destacados en 3D en la pantalla de inicio.
 * **Comportamiento:** Las tarjetas giran en perspectiva 3D (`transform: scale() rotateY()`). La foto de fondo de pantalla completa cambia sincronizadamente con efecto de fundido fotográfico (*crossfade/blur*).
 * **Entradas/Eventos:** Clic en tarjetas laterales, botones de dirección, flechas del teclado (`←` / `→`), gestos táctiles (*swipe*) o temporizador de autoavance (5.5s).
 
 ### **RF-02: Motor de Afinidades y Cuestionario Interactivo**
+
 * **Descripción:** Algoritmo en 4 pasos que calcula el porcentaje de compatibilidad entre las preferencias del usuario y los destinos.
-* **Comportamiento:** 
+* **Comportamiento:**
   1. *Paso 1:* Captura origen y duración del viaje.
   2. *Paso 2:* Define la compañía (Solo, Pareja, Amigos, Familia).
   3. *Paso 3:* Define el rango de presupuesto en pesos colombianos (COP).
@@ -32,28 +34,33 @@
 * **Salida:** Animación de cálculo (*matching*) y despliegue del **Top 3 de destinos recomendados** con medallas (🥇, 🥈, 🥉), insignias de compatibilidad (ej. ★ 95%) y desglose económico.
 
 ### **RF-03: Catálogo Multicriterio con Búsqueda en Tiempo Real**
+
 * **Descripción:** Módulo de exploración global con 28 destinos de los 5 continentes (América del Sur, América del Norte, Europa, Asia, África y Oceanía).
-* **Comportamiento:** 
+* **Comportamiento:**
   * *Búsqueda instantánea:* Filtra en vivo mientras el usuario escribe la ciudad o país en el buscador.
   * *Filtrado por categorías:* Botones tipo chip (*Playa, Cultura, Aventura, Gastronomía, Romance, Fiesta*).
   * *Filtro de presupuesto:* Selector por rangos en COP (*Económico < $3M, Moderado $3M-$5M, Premium > $5M*).
   * *Ordenamiento:* Selector dinámico por *Recomendados, Mayor compatibilidad, Menor precio y Mayor precio*.
 
 ### **RF-04: Sistema de Modales Personalizados (Alertas)**
+
 * **Descripción:** Sustitución de los `alert()` nativos por un modal emergente centrado.
 * **Comportamiento:** Muestra una ventana con fondo desenfocado (*backdrop blur*), icono, mensaje claro y botón de acción. Se cierra mediante botón, clic externo o tecla `Escape`.
 
 ### **RF-05: Enlace Dinámico por URL (Deep Linking)**
+
 * **Descripción:** Conexión transparente entre el buscador de la página de inicio y el catálogo.
 * **Comportamiento:** Al enviar una búsqueda desde el formulario tradicional de la home, el catálogo lee los parámetros de la URL (`?destino=...`) y aplica la búsqueda de inmediato al cargar.
 
 ### **RF-06: Vista Detallada de Destino e Inteligencia de Viaje (`pages/detalle.html`)**
+
 * **Descripción:** Pantalla detallada de cada destino con desglose económico, itinerario diario y tres secciones especializadas:
   1. *Sección 7 — Gastronomía Típica:* Muestra los platillos autóctonos de la región con precios promedios e íconos temáticos.
   2. *Sección 8 — Festividades y Calendario Cultural:* Detecta en tiempo real el mes actual del sistema (`new Date().getMonth()`) para destacar los carnavales y eventos vigentes en la fecha de consulta, junto a un calendario anual completo.
   3. *Sección 9 — Las 4 Estaciones del Año:* Muestra la guía climática de Primavera 🌸, Verano ☀️, Otoño 🍁 e Invierno ❄️ con rango de meses, temperaturas y recomendaciones de vestimenta ("🎒 Qué llevar").
 
 ### **RF-07: Modo Oscuro y Navegación Flotante Global (`js/global.js`)**
+
 * **Descripción:** Widget flotante ubicado en la parte inferior derecha de todas las pantallas con dos controles esenciales:
   1. *Alternador de Modo Oscuro (🌙 / ☀️):* Cambia los colores del tema de la aplicación con persistencia en `localStorage`.
   2. *Botón Volver Arriba (⬆️):* Flecha inteligente que aparece dinámicamente cuando el usuario desciende más de 280px en el scroll y realiza un movimiento suave (*smooth scroll*) hacia el inicio de la página.
@@ -96,24 +103,31 @@
 
 ---
 
-## 🗄️ 4. Modelo de Datos del Aplicativo (Esquema de Destino)
+## 🗄️ 4. Modelo de Base de Datos Relacional (`database.sql`)
 
-Cada destino dentro del sistema está representado por un objeto estandarizado (compatible con futuras tablas en MySQL / SQL Server):
+El proyecto cuenta con un modelo de base de datos relacional formal diseñado para **MySQL / MySQL Workbench**, contenido en el archivo [`database.sql`](file:///C:/Users/Usuario/OneDrive%20-%20CESDE/Documentos/U%20LUIS%20AMIGO/SEGUNDO%20SEMESTRE/ELECTIVA1-PROGRAMACION%20WEB/Proyecto%201/TRAVELMATE.0.1/database.sql).
 
-```javascript
-{
-  id: String,             // Identificador único (ej. 'cartagena')
-  nombre: String,         // Nombre oficial del destino
-  pais: String,           // País de ubicación
-  img: String,            // Ruta a la imagen local en assets/img/
-  tag: String,            // Etiqueta temática (ej. '#Caribe')
-  categorias: Array,      // Categorías asociadas (['playa', 'cultura', 'gastronomia'])
-  precio: Number,         // Precio estimado base en pesos colombianos (COP)
-  compatibilidad: Number, // Porcentaje de afinidad base (ej. 95)
-  duracion: String,       // Duración sugerida (ej. '3 a 5 días')
-  descripcion: String     // Resumen descriptivo del destino
-}
-```
+### **A. Justificación de la Base de Datos Relacional**
+
+* **¿Por qué se crea en SQL?**: Una plataforma turística real gestiona transacciones críticas (pagos, documentos de identidad para aerolíneas, acompañantes por vuelo y habitaciones). Un modelo relacional bajo la **Tercera Forma Normal (3NF)** elimina la duplicación de datos, asegura la consistencia de precios y vincula a cada cliente con sus reservas y favoritos de forma auditable.
+* **¿Por qué se utiliza `ENGINE=InnoDB`?**:
+  1. **Integridad Referencial con Claves Foráneas (`FOREIGN KEY`)**: Garantiza que no existan reservas huérfanas sin usuario o sin destino válido. Si una llave no existe, MySQL bloquea la operación.
+  2. **Transacciones Seguras (`ACID`)**: Permite que una reserva, la lista de pasajeros y el pago se ejecuten como una sola unidad atómica. Si el pago falla, la operación se cancela completamente (*rollback*), evitando reservas fantasmas.
+  3. **Bloqueo por Filas (*Row-Level Locking*)**: Optimiza la concurrencia permitiendo que cientos de usuarios consulten o reserven paquetes simultáneamente sin bloquear la tabla completa.
+
+### **B. Estructura de las 9 Tablas Implementadas**
+
+| # | Tabla | Propósito y Relaciones |
+| :---: | :--- | :--- |
+| **1** | `roles` | Catálogo de permisos del sistema (*Super Admin, Administrador, Trabajador, Cliente*). |
+| **2** | `usuarios` | Datos legales y de acceso: documento (`CC`, `CE`, `PASAPORTE`), teléfonos, email único y **contacto de emergencia** (exigido por ley turística). |
+| **3** | `categorias` | Experiencias temáticas (*Playa, Cultura, Aventura, Gastronomía, Romance, Fiesta*). |
+| **4** | `destinos` | Catálogo de los 28 destinos con código IATA, precios COP, duración, temporadas y fotos. |
+| **5** | `destino_categorias` | Tabla intermedia para la relación **Muchos a Muchos (M:N)** entre destinos y categorías. |
+| **6** | `favoritos` | Tabla intermedia **M:N** con clave única para la colección de destinos guardados por cliente. |
+| **7** | `reservas` | Encabezado transaccional: código `TM-XXXXX`, fechas, categoría de alojamiento, total COP y estado. |
+| **8** | `pasajeros_reserva` | Detalle legal de los viajeros reales (titular y acompañantes con sus nombres y documentos). |
+| **9** | `pagos` | Registro financiero vinculado a la reserva: método (*PSE, Tarjetas, Transferencia*), referencia y estado. |
 
 ---
 
@@ -122,12 +136,12 @@ Cada destino dentro del sistema está representado por un objeto estandarizado (
 ```text
 TRAVELMATE.0.1/
 ├── index.html               # Landing Page (Hero 3D, 6 Secciones y Modal)
+├── database.sql             # Script SQL Relacional para MySQL Workbench (9 tablas + Seed Data)
 ├── README.md                # Documentación Técnica y Funcional Oficial
 ├── css/
 │   ├── style.css            # Estilos globales, carrusel 3D, modo oscuro, responsive, toasts y modales
 │   ├── login.css            # Estilos exclusivos de la pantalla dividida de Login / Registro
-│   ├── admin.css            # Estilos dedicados del Panel de Administración TravelMate
-│   └── style.backup.css     # Copia de seguridad de estilos
+│   └── admin.css            # Estilos dedicados del Panel de Administración TravelMate
 ├── js/
 │   ├── global.js            # Lógica global: Modo oscuro, botón arriba, sesión, favoritos y reservas
 │   ├── script.js            # Lógica de la home, carrusel 3D, modal y scroll
@@ -175,3 +189,4 @@ TRAVELMATE.0.1/
 | **v1.4** | Oct 2026 | **Suite de Administración y Control Maestro**: Implementación completa de `pages/panelAdmin.html`, `css/admin.css` y `js/panel.js`. Control jerárquico de roles (*Super Admin, Administrador, Trabajador, Cliente*), métricas dinámicas (KPIs), CRUD de usuarios y paquetes turísticos, filtros en tiempo real y enlace directo desde el menú de navegación. |
 | **v1.5** | Oct 2026 | **Optimización Responsive Móvil & Redirección Profesional**: Menú hamburguesa deslizable con soporte touch para submenús, píldora sobria con iniciales corporativas (eliminación de íconos infantiles), soporte de clic para mantener abierto el menú de sesión y redirección fluida a la página de inicio post-login. |
 | **v1.6** | Oct 2026 | **Experiencia Integral de Viajero (Favoritos, Perfil y Reservas)**:<br>1. **Sistema de Favoritos (`pages/favoritos.html` & `js/favoritos.js`)**: Botones de corazón reactivos en catálogo y detalle, persistencia `tm_favoritos`, tarjetas dinámicas y estado vacío con enlace al catálogo.<br>2. **Centro de Control / Mi Perfil (`pages/cuenta.html` & `js/cuenta.js`)**: Edición de datos personales (nombre, teléfono, ciudad, estilo de viaje), actualización de contraseña con validación de seguridad y métricas en vivo.<br>3. **Sistema de Reservas / Mis Viajes (`pages/viajes.html` & `js/viajes.js`)**: Modal de reserva interactivo en `pages/detalle.html` con recálculo dinámico de precios en COP según viajeros y categoría, código único de reserva (`TM-XXXXX`), persistencia `tm_reservas`, filtrado por estado y cancelación en un clic.<br>4. **Sistema Global de Toasts**: Notificaciones flotantes animadas (`mostrarToastGlobal`) sin interrumpir la navegación. |
+| **v1.7** | Nov 2026 | **Alineación 100% con Modelo Relacional SQL (MySQL Workbench)**:<br>1. **Identificación Legal de Clientes**: Soporte completo para tipo de documento (CC, CE, Pasaporte, DNI), número de identificación, teléfono principal y contacto de emergencia con teléfono en registro (`login.html`) y perfil (`cuenta.html`).<br>2. **Pasajeros Dinámicos y Métodos de Pago**: El modal de reserva (`detalle.html`) ahora recopila los acompañantes reales si viajan 2 o más personas (nombres y documentos para la tabla `pasajeros_reserva`) y permite seleccionar método de pago (PSE, Tarjeta de Crédito/Débito, Transferencia) para la tabla `pagos`.<br>3. **Modal de Cancelación Profesional**: Sustitución total del `confirm()` nativo del navegador en `pages/viajes.html` por un modal corporativo de advertencia con política flexible y confirmación limpia en un clic. |

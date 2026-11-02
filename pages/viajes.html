@@ -114,6 +114,36 @@
 
 </main>
 
+<!-- ===== MODAL DE CONFIRMACIÓN DE CANCELACIÓN (Elimina el confirm() del navegador) ===== -->
+<div class="tm-modal-overlay" id="modalCancelarReserva">
+    <div class="tm-modal-contenedor" style="max-width: 480px; text-align: center;">
+        <div style="background: linear-gradient(135deg, #991b1b, #dc2626); padding: 28px 20px 22px; border-radius: 16px 16px 0 0; color: #ffffff;">
+            <div style="width: 64px; height: 64px; background: rgba(255, 255, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 32px;">
+                ⚠️
+            </div>
+            <h3 style="margin: 0; font-size: 22px; font-weight: 600;">¿Cancelar esta Reserva?</h3>
+        </div>
+        <div style="padding: 26px;">
+            <p style="font-size: 15px; color: #2c2520; line-height: 1.6; margin: 0 0 16px;">
+                Estás a punto de cancelar la reserva <strong id="modalCancCodigo" style="color: #b91c1c;">TM-00000</strong> para el destino <strong id="modalCancDestino">Destino</strong>.
+            </p>
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 14px; margin-bottom: 24px; text-align: left;">
+                <p style="margin: 0; font-size: 13px; color: #991b1b; line-height: 1.5;">
+                    🛡️ <strong>Política Flexible TravelMate:</strong> No se aplicarán penalizaciones económicas y tus datos quedarán archivados en el historial de la plataforma.
+                </p>
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button type="button" class="btn-modal-secundario" id="btnCerrarModalCanc" style="flex: 1; padding: 12px;">
+                    Volver Atrás
+                </button>
+                <button type="button" id="btnConfirmarCancelacionModal" style="flex: 1; padding: 12px; background: #dc2626; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;">
+                    Sí, Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ===== PIE DE PÁGINA ===== -->
 <footer>
     <div class="footer-brand">

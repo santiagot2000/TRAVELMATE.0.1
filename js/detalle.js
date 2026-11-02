@@ -406,14 +406,43 @@ function configurarModalReserva(d) {
   var selectViajeros = document.getElementById('resViajeros');
   var selectAlojamiento = document.getElementById('resAlojamiento');
   var inputNombre = document.getElementById('resTitularNombre');
+  var inputDoc = document.getElementById('resTitularDoc');
   var inputEmail = document.getElementById('resTitularEmail');
   var inputTel = document.getElementById('resTitularTel');
+  var selectPago = document.getElementById('resMetodoPago');
+  var contenedorAcompanantes = document.getElementById('contenedorAcompanantes');
+  var listaAcompanantes = document.getElementById('listaAcompanantesCampos');
 
   // Elementos del desglose
   var txtBase = document.getElementById('resDesgloseBase');
   var txtViajeros = document.getElementById('resDesgloseViajeros');
   var txtCat = document.getElementById('resDesgloseCat');
   var txtTotal = document.getElementById('resDesgloseTotal');
+
+  // Función para generar campos dinámicos de acompañantes
+  function actualizarCamposAcompanantes(cantidadTotal) {
+    if (!contenedorAcompanantes || !listaAcompanantes) return;
+    var cantidadAcomp = cantidadTotal - 1;
+    if (cantidadAcomp <= 0) {
+      contenedorAcompanantes.style.display = 'none';
+      listaAcompanantes.innerHTML = '';
+      return;
+    }
+
+    contenedorAcompanantes.style.display = 'block';
+    listaAcompanantes.innerHTML = '';
+
+    for (var i = 1; i <= cantidadAcomp; i++) {
+      var fila = document.createElement('div');
+      fila.style.display = 'grid';
+      fila.style.gridTemplateColumns = '1.4fr 1fr';
+      fila.style.gap = '8px';
+      fila.innerHTML =
+        '<input type="text" class="campo-acomp-nombre" placeholder="Nombre completo acompañante ' + (i + 1) + '" required style="padding: 9px 12px; border: 1px solid #dcd4c8; border-radius: 6px; font-size: 13.5px;">' +
+        '<input type="text" class="campo-acomp-doc" placeholder="Documento / Pasaporte" required style="padding: 9px 12px; border: 1px solid #dcd4c8; border-radius: 6px; font-size: 13.5px;">';
+      listaAcompanantes.appendChild(fila);
+    }
+  }
 
   // Establecer fechas mínimas (hoy y hoy + 5 días)
   var hoy = new Date();
@@ -438,21 +467,42 @@ function configurarModalReserva(d) {
     if (sesionStr) {
       var usuario = JSON.parse(sesionStr);
       if (inputNombre && !inputNombre.value) inputNombre.value = usuario.nombre || '';
+      if (inputDoc && !inputDoc.value) inputDoc.value = usuario.numero_documento || '1020304050';
       if (inputEmail && !inputEmail.value) inputEmail.value = usuario.email || '';
-      if (inputTel && !inputTel.value) inputTel.value = usuario.telefono || '+57 300 123 4567';
+      if (inputTel && !inputTel.value) inputTel.value = usuario.telefono_principal || usuario.telefono || '+57 300 123 4567';
     }
   } catch (e) {
     console.warn('Error leyendo sesión para reserva:', e);
   }
 
-  // Cálculo de precio en tiempo real
+  // Cálculo de precio en tiempo real y actualización de acompañantes
   function recalcularPrecioReserva() {
     var numViajeros = parseInt(selectViajeros ? selectViajeros.value : '2', 10) || 2;
     var cat = selectAlojamiento ? selectAlojamiento.value : 'Confort Superior';
 
+    // Actualizar campos dinámicos de acompañantes
+    actualizarCamposAcompanantes(numViajeros);
+
     var multCat = 1.0;
     var labelCat = 'Incluido';
     if (cat === 'Estándar') {
+      multCat = 0.85;
+      labelCat = '-15% (Económico)';
+    } else if (cat === 'Lujo & Exclusivo') {
+      multCat = 1.40;
+      labelCat = '+40% (Lujo 5★)';
+    }
+
+    var precioBasePersona = d.precioTotal || 2450000;
+    var total = Math.round(precioBasePersona * multCat * numViajeros);
+
+    if (txtBase) txtBase.textContent = '$' + precioBasePersona.toLocaleString('es-CO') + ' COP';
+    if (txtViajeros) txtViajeros.textContent = 'x ' + numViajeros + (numViajeros === 1 ? ' persona' : ' personas');
+    if (txtCat) txtCat.textContent = labelCat;
+    if (txtTotal) txtTotal.textContent = '$' + total.toLocaleString('es-CO') + ' COP';
+
+    return total;
+  }
       multCat = 0.85;
       labelCat = '-15% (Económico)';
     } else if (cat === 'Lujo & Exclusivo') {
@@ -524,6 +574,29 @@ function configurarModalReserva(d) {
     } catch (err) {}
 
     var emailUsuario = sesionActual ? sesionActual.email : inputEmail.value.trim();
+    var metodoPago = selectPago ? selectPago.value : 'PSE';
+
+    // Recolectar lista de pasajeros (Titular + Acompañantes) para la tabla pasajeros_reserva
+    var listaPasajeros = [];
+    listaPasajeros.push({
+      nombres: inputNombre.value.trim(),
+      numero_documento: inputDoc ? inputDoc.value.trim() : '',
+      tipo_documento: 'CC',
+      es_titular: true
+    });
+
+    if (numViajeros > 1 && listaAcompanantes) {
+      var inputsNom = listaAcompanantes.querySelectorAll('.campo-acomp-nombre');
+      var inputsD = listaAcompanantes.querySelectorAll('.campo-acomp-doc');
+      for (var idx = 0; idx < inputsNom.length; idx++) {
+        listaPasajeros.push({
+          nombres: inputsNom[idx].value.trim() || ('Acompañante ' + (idx + 2)),
+          numero_documento: inputsD[idx] ? inputsD[idx].value.trim() : '',
+          tipo_documento: 'CC',
+          es_titular: false
+        });
+      }
+    }
 
     var datosReserva = {
       usuarioEmail: emailUsuario,
@@ -537,8 +610,11 @@ function configurarModalReserva(d) {
       viajeros: numViajeros,
       alojamiento: cat,
       precioTotal: totalFinal,
+      metodoPago: metodoPago,
+      pasajeros: listaPasajeros,
       titular: {
         nombre: inputNombre.value.trim(),
+        documento: inputDoc ? inputDoc.value.trim() : '',
         email: inputEmail.value.trim(),
         telefono: inputTel.value.trim()
       }

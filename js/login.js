@@ -352,12 +352,16 @@ function ejecutarLogin() {
    Valida campos, verifica que el email no exista y guarda en localStorage.
    ================================================================ */
 function ejecutarRegistro() {
-  var nombre    = document.getElementById('regNombre').value.trim();
-  var email     = document.getElementById('regEmail').value.trim();
-  var pais      = document.getElementById('regPais').value;
-  var pass      = document.getElementById('regPass').value;
-  var passConf  = document.getElementById('regPassConf').value;
-  var terminos  = document.getElementById('aceptaTerminos').checked;
+  var nombre         = document.getElementById('regNombre').value.trim();
+  var email          = document.getElementById('regEmail').value.trim();
+  var tipoDoc        = document.getElementById('regTipoDoc') ? document.getElementById('regTipoDoc').value : 'CC';
+  var numDoc         = document.getElementById('regNumDoc') ? document.getElementById('regNumDoc').value.trim() : '';
+  var telefono       = document.getElementById('regTelefono') ? document.getElementById('regTelefono').value.trim() : '';
+  var telEmergencia  = document.getElementById('regTelEmergencia') ? document.getElementById('regTelEmergencia').value.trim() : '';
+  var pais           = document.getElementById('regPais').value;
+  var pass           = document.getElementById('regPass').value;
+  var passConf       = document.getElementById('regPassConf').value;
+  var terminos       = document.getElementById('aceptaTerminos').checked;
 
   /* Validar todos los campos antes de continuar */
   if (!nombre || nombre.length < 3) {
@@ -365,6 +369,15 @@ function ejecutarRegistro() {
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     mostrarToast('⚠️ Ingresa un correo válido', 'error-t'); return;
+  }
+  if (!numDoc) {
+    mostrarToast('⚠️ Ingresa tu número de documento', 'error-t'); return;
+  }
+  if (!telefono) {
+    mostrarToast('⚠️ Ingresa tu teléfono de contacto', 'error-t'); return;
+  }
+  if (!telEmergencia) {
+    mostrarToast('⚠️ Ingresa un teléfono de emergencia', 'error-t'); return;
   }
   if (!pais) {
     mostrarToast('⚠️ Selecciona tu país', 'error-t'); return;
@@ -379,11 +392,11 @@ function ejecutarRegistro() {
     mostrarToast('⚠️ Acepta los términos para continuar', 'error-t'); return;
   }
 
-  /* Verificar que el email no esté ya registrado */
+  /* Verificar que el email o documento no esté ya registrado */
   var usuarios = JSON.parse(localStorage.getItem('tm_usuarios') || '[]');
-  var yaExiste = usuarios.find(function(u) { return u.email === email; });
+  var yaExiste = usuarios.find(function(u) { return u.email === email || (u.numero_documento && u.numero_documento === numDoc); });
   if (yaExiste) {
-    mostrarToast('❌ Este email ya está registrado', 'error-t'); return;
+    mostrarToast('❌ Este email o documento ya está registrado', 'error-t'); return;
   }
 
   /* Mostrar spinner durante el proceso */
@@ -392,20 +405,37 @@ function ejecutarRegistro() {
   setTimeout(function() {
     setLoadingBtn('textoRegBtn', 'spinnerReg', false);
 
-    /* Crear el objeto del nuevo usuario */
-    var partesNombre = nombre.split(' ');
-    var iniciales = partesNombre.length > 1
-      ? (partesNombre[0].charAt(0) + partesNombre[1].charAt(0)).toUpperCase()
+    /* Separar nombres y apellidos */
+    var partes = nombre.split(' ');
+    var nombres = partes[0] || nombre;
+    var apellidos = partes.slice(1).join(' ') || '';
+
+    var iniciales = partes.length > 1
+      ? (partes[0].charAt(0) + partes[1].charAt(0)).toUpperCase()
       : nombre.substring(0, 2).toUpperCase();
 
     var nuevoUsuario = {
-      id:       Date.now(),           /* ID único basado en timestamp */
-      nombre:   nombre,
-      email:    email,
-      pais:     pais,
+      id: Date.now(),
+      id_rol: 4, // Cliente
+      rol: 'Cliente',
+      tipo_documento: tipoDoc,
+      numero_documento: numDoc,
+      nombres: nombres,
+      apellidos: apellidos,
+      nombre: nombre,
+      email: email,
+      telefono_principal: telefono,
+      telefono: telefono,
+      telefono_emergencia: telEmergencia,
+      nombre_contacto_emergencia: 'Contacto Familiar',
+      pais_residencia: pais,
+      pais: pais,
+      ciudad_residencia: 'Medellín',
+      ciudad: 'Medellín',
       password: pass,
-      fechaReg: new Date().toISOString(),
-      avatar:   iniciales
+      estado_cuenta: 'Activo',
+      fecha_registro: new Date().toISOString(),
+      avatar: iniciales
     };
 
     /* Guardar en localStorage y activar sesión */

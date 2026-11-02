@@ -154,22 +154,55 @@ function renderizarListaViajes(emailUsuario) {
         '</div>' +
       '</div>';
 
-    // Evento de cancelación
+    // Evento de cancelación con modal personalizado (sin confirm del navegador)
     var btnCancelar = card.querySelector('.btn-cancelar-accion');
     if (btnCancelar) {
       btnCancelar.addEventListener('click', function() {
-        if (confirm('¿Estás seguro de que deseas cancelar la reserva ' + r.id + ' para ' + r.destinoNombre + '?\n\nNo se aplicarán penalizaciones según las políticas de TravelMate.')) {
-          if (typeof cancelarReserva === 'function') {
-            cancelarReserva(r.id);
-          }
-          if (typeof mostrarToastGlobal === 'function') {
-            mostrarToastGlobal('Reserva ' + r.id + ' cancelada', 'info');
-          }
-          renderizarListaViajes(emailUsuario);
-        }
+        abrirModalCancelarReserva(r, emailUsuario);
       });
     }
 
     grid.appendChild(card);
   });
+}
+
+/* ================================================================
+   MODAL DE CANCELACIÓN PERSONALIZADO (Cero confirm nativo)
+   ================================================================ */
+function abrirModalCancelarReserva(reserva, emailUsuario) {
+  var modal = document.getElementById('modalCancelarReserva');
+  if (!modal) return;
+
+  var txtCodigo = document.getElementById('modalCancCodigo');
+  var txtDestino = document.getElementById('modalCancDestino');
+  var btnCerrar = document.getElementById('btnCerrarModalCanc');
+  var btnConfirmar = document.getElementById('btnConfirmarCancelacionModal');
+
+  if (txtCodigo) txtCodigo.textContent = reserva.id || 'TM-00000';
+  if (txtDestino) txtDestino.textContent = reserva.destinoNombre || 'tu destino';
+
+  modal.classList.add('abierto');
+
+  function cerrar() {
+    modal.classList.remove('abierto');
+  }
+
+  if (btnCerrar) btnCerrar.onclick = cerrar;
+
+  modal.onclick = function(e) {
+    if (e.target === modal) cerrar();
+  };
+
+  if (btnConfirmar) {
+    btnConfirmar.onclick = function() {
+      cerrar();
+      if (typeof cancelarReserva === 'function') {
+        cancelarReserva(reserva.id);
+      }
+      if (typeof mostrarToastGlobal === 'function') {
+        mostrarToastGlobal('Reserva ' + reserva.id + ' cancelada', 'info');
+      }
+      renderizarListaViajes(emailUsuario);
+    };
+  }
 }
